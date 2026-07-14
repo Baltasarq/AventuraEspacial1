@@ -9,12 +9,13 @@ _La Aventura Espacial_ es un relato interactivo basado en una aventura conversac
 En esta primera parte, disponible en origen únicamente para PC, Atari y Amiga, acabas de terminar tu período de aprendizaje en el Anillo Dorado y eres ya todo un Cosme. Debes prepararte para la peligrosa misión que te encomendarán.
 
 Localizaciones del Anillo Dorado:
-     * ZOED = Zona de Educación
-     * ZOT  = Zona de Tránsito
-     * ZOES = Zona de Esparcimiento
-     * ZODO = Zona de Documentación
-     * ZOIN = Zona de Ingeniería
-     * ZODE = Zona de Cambio Atmosférico (descompresión)
+
+- ZOED = Zona de Educación     
+- ZOT  = Zona de Tránsito
+- ZOES = Zona de Esparcimiento
+- ZODO = Zona de Documentación
+- ZOIN = Zona de Ingeniería
+- ZODE = Zona de Cambio Atmosférico (descompresión)
 
 ## Concursos
 
