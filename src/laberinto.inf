@@ -1,0 +1,273 @@
+Constant MaxFilasLaberinto 10;
+Constant MaxColumnasLaberinto 10;
+
+Array laberinto_cuerda_desde --> ( MaxFilasLaberinto * MaxColumnasLaberinto ) + 1;
+Array laberinto_cuerda_hacia --> ( MaxFilasLaberinto * MaxColumnasLaberinto ) + 1;
+Array laberinto_objs_por_loc --> ( MaxFilasLaberinto * MaxColumnasLaberinto ) + 1;
+
+object laberinto
+with
+    init [ i;
+        for( i = 0: i < ( MaxFilasLaberinto * MaxColumnasLaberinto ) + 1: ++i) {
+            laberinto_cuerda_desde-->i = Nothing;
+            laberinto_cuerda_hacia-->i = Nothing;
+            laberinto_objs_por_loc-->i = Nothing;
+        }
+    ],
+    hotInit [ i;
+        for( i = 0: i < ( MaxFilasLaberinto * MaxColumnasLaberinto ) + 1: ++i) {
+            laberinto_cuerda_desde-->i = Nothing;
+            laberinto_cuerda_hacia-->i = Nothing;
+        }
+    ],
+    pasaPosVector [ x y toret;
+        toret = y * MaxColumnasLaberinto;
+        toret = toret + x;
+        
+        return toret;
+    ],
+    cuerdaDesde [x y pos;
+        pos = self.pasaPosVector( x, y );
+        return laberinto_cuerda_desde-->pos;
+    ],
+    cuerdaHacia [x y pos;
+        pos = self.pasaPosVector( x, y );
+        return laberinto_cuerda_hacia-->pos;
+    ],
+    getObjeto[ x y pos;
+        pos = self.pasaPosVector( x, y );
+        return laberinto_objs_por_loc-->pos;
+    ],
+    ponCuerdaDesde [x y obj pos;
+        pos = self.pasaPosVector( x, y );
+        if ( laberinto_cuerda_desde-->pos == Nothing ) {
+            laberinto_cuerda_desde-->pos = obj;
+        }
+        rtrue;
+    ],
+    ponCuerdaHacia [x y obj pos;
+        pos = self.pasaPosVector( x, y );
+        
+        if ( laberinto_cuerda_hacia-->pos == Nothing ) {
+            laberinto_cuerda_hacia-->pos = obj;
+        }
+        rtrue;
+    ],
+     putObjeto[ x y obj pos;
+        pos = self.pasaPosVector( x, y );
+        laberinto_objs_por_loc-->pos = obj;
+    ],
+;
+
+! ================= Labyrinth Rooms ===============
+Espacio introLaberinto "Entrada a las conducciones interiores"
+with
+    grf grfCab,
+    auxGrf grfMapaS3N1,
+	description [;
+        self.Habitacion::description();
+        "Un gran tubo de metal reluciente conduce hacia abajo.";
+    ],
+    u_to [;
+        ZODE_S3___ESCLUSA_ESTANCA.dir = ZOIN_S3___INGENIERIA;
+        playerTo( ZODE_S3___ESCLUSA_ESTANCA, 2 );
+        rtrue;
+    ],
+	d_to [;
+        pnjINGENIERO.tunelVisitado();
+    
+        pasar_a_Brujula();
+        pasajeLaberinto.init(); 
+        pasajeLaberinto.direccionDesde = u_obj;
+        laberinto.hotInit();
+        playerTo( pasajeLaberinto, 2 );
+        rtrue;
+    ],
+    before [;
+        salidas:
+            print "Puedes ";
+            setBeginHyperLink( HL_ABAJO );
+            print (s_fixed) "bajar";
+            setEndHyperlink();
+            print " a las conducciones inferiores, o ";
+            setBeginHyperlink( HL_ARRIBA );
+            print (s_fixed) "subir";
+            setEndHyperlink();
+            print " de vuelta a la esclusa.";
+    ],
+;
+Espacio pasajeLaberinto "Pasaje de mantenimiento"
+with
+    grf grfZOT,
+    auxGrf grfMapaS3N1,
+    direccionDesde Nothing,
+	MaxFilas MaxFilasLaberinto,
+	MaxColumnas MaxColumnasLaberinto,
+	DestX 8,
+	DestY 7,
+	init [;
+		self.x = self.y = 0;
+	],
+	e_to [; 
+        self.direccionDesde = w_obj;
+        laberinto.ponCuerdaHacia( self.x, self.y, e_obj );
+        self.x = ( self.x + 1 ) % self.MaxColumnas; <<look>>;
+    ],
+	w_to [;
+        self.direccionDesde = e_obj;
+        laberinto.ponCuerdaHacia( self.x, self.y, w_obj );
+        self.x--; 
+        if ( self.x < 0 ) {
+            self.x = self.MaxColumnas - 1;
+        }
+        <<look>>;
+    ],
+	n_to [;
+        self.direccionDesde = s_obj;
+        laberinto.ponCuerdaHacia( self.x, self.y, n_obj );
+        self.y--; 
+        if ( self.y < 0 ) {
+            self.y = self.MaxFilas - 1;
+        }
+        <<look>>;
+    ],
+	s_to [;
+        laberinto.ponCuerdaHacia( self.x, self.y, s_obj );
+        self.direccionDesde = n_obj;
+        self.y = ( self.y + 1 ) % self.MaxFilas;
+        <<look>>;
+    ],
+	d_to [;
+		if ( self.x == self.DestX
+		  && self.y == self.DestY )
+  		{
+			playerTo( ZOMA_S3___CONTROLES, 2 );
+			rtrue;
+		}
+		else return self.cant_go();		
+	],
+	u_to [; 
+		if ( self.x == 0
+		  && self.y == 0 )
+  		{
+            pasar_a_ConexionesNauticas();
+			playerTo( introLaberinto, 2 );
+			rtrue;
+		}
+		else return self.cant_go();
+	],
+	cant_go "No hay pasaje en esa dirección.",
+	x 0,
+	y 0,
+    moveObjectsToLimbo [ obj nextObj;
+        obj = child( self );
+        while( obj ~= Nothing ) {
+            nextObj = sibling( obj );
+            
+            if ( obj ofclass Thing ) {
+                move obj to limbo;
+            }
+            
+            obj = nextObj;
+        }
+    ],
+    currentObject Nothing,
+	description  [ obj viene va;
+        self.Habitacion::description();
+        
+        ! manejarse con los objetos
+        self.currentObject = Nothing;
+        self.moveObjectsToLimbo();
+        obj = laberinto.getObjeto( self.x, self.y );
+        if ( obj ~= Nothing ) {
+            move obj to self;
+            self.currentObject = obj;
+        }
+        
+        ! Cuerda
+        laberinto.ponCuerdaDesde( self.x, self.y, self.direccionDesde );
+        
+        ! Describir
+		print "^El pasillo se parece mucho a la ronda del nivel 1, si bien en este caso no existe gravedad. Además, a cada paso aparecen nuevas bifurcaciones, que hacen especialmente difícil orientarse. Flotas, de hecho, en el medio de una intersección.";
+		!print "^", self.x, ".", self.y;
+        
+        if ( objArnes.estaAtado() ) {
+            viene = laberinto.cuerdaDesde( self.x, self.y );
+            va = laberinto.cuerdaHacia( self.x, self.y );
+            
+            if ( viene ~= Nothing ) {
+                print "^La cuerda viene ", (del) viene;
+                
+                if ( va ~= Nothing ) {
+                    print ", y desaparece por ", (el) va;
+                }
+            }
+            else
+            if ( va ~= Nothing ) {
+                print "^La cuerda desaparece por ", (el) va;
+            }
+            
+            print ".^";
+        }
+        
+		rtrue;
+		
+	],
+    after [;
+        drop:
+            self.currentObject = noun;
+            laberinto.putObjeto( self.x, self.y, noun );
+        take:
+            self.currentObject = Nothing;
+            laberinto.putObjeto( self.x, self.y, Nothing );
+    ],
+	before [;
+        take:
+            if ( noun ~= self.currentObject ) {
+                "Aquí no hay otra cosa que ", (un) self.currentObject, ".";
+            }
+        drop:
+            if ( self.currentObject ~= Nothing ) {
+                "No puedes dejar más basura por ahí, flotando.";
+            }
+		salidas:
+			print "Salidas: ";
+            setBeginHyperlink( HL_NORTE );
+            print (s_fixed) "norte";
+            setEndHyperlink();
+            print ", ";
+            setBeginHyperlink( HL_SUR );
+            print (s_fixed) "sur";
+            setEndHyperlink();
+            print ", ";
+            setBeginHyperlink( HL_ESTE );
+            print (s_fixed) "este";
+            setEndHyperlink();
+            print " y ";
+            setBeginHyperlink( HL_OESTE );
+            print (s_fixed) "oeste";
+            setEndHyperlink();
+            print ".";
+            
+			if ( self.x == 0
+			  && self.y == 0 )
+			{
+				print " Un pasadizo se abre sobre tu cabeza, hacia ";
+                setBeginHyperlink( HL_ARRIBA );
+                print (s_fixed) "arriba";
+                setEndHyperlink();
+                print ".";
+			}
+			else
+			if ( self.x == self.DestX
+			  && self.y == self.DestY )
+			{
+				print " Un pasadizo se abre bajo tus pies, hacia ";
+                setBeginHyperlink( HL_ABAJO );
+                print (s_fixed) "abajo";
+                setEndHyperlink();
+                print ". ";
+			}
+			"^";
+	],
+;

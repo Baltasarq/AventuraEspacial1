@@ -1,0 +1,334 @@
+ZOED S4 - Aula
+.recurso_grafico "c:\informate\prys\AventuraEspacial\res\zoed.png"
+
+En el aula de instrucción toda la atención está centrada alrededor del sabio gran maestro galáctico, quien, frente al monitor del espacio profundo, instruye a los comandos que no tienen asignada ninguna misión.
+
+[La confederación galáctica contra el cerebro loco. Primera parte: en el anillo dorado. Has terminado tu instrucción. Eres un comando espacial en misión exploratoria.]
+
+> ex mono de faena
+Es un traje completo, muy cómodo para la vida en dependencias espaciales. Su ligereza y capacidad de transpiración hace que se puedan llevar encima durante largos periodos de tiempo sin provocar alergias ni irritaciones de ningún tipo.
+
+> coge mono de faena
+Cogido.
+
+> ex foto
+La foto de tu novia, que siempre llevas contigo.
+
+> coge la foto
+Cogida.
+
+> i
+mono de faena,
+foto
+
+> ex maestro
+Los grandes maestros galácticos imparten charlas a los comandos que les permiten manejarse en cualquier situación conocida.
+
+> ex comandos
+Todos escuchan con atención al gran maestro.
+
+> salir
+
+ZOT S4 - Instrucción
+.recurso_grafico "c:\informate\prys\AventuraEspacial\res\zot.png"
+
+Una entrada permite acceder al aula de instrucción, desde esta zona de tránsito. Al norte (siguiendo el giro) y sur (antigiro), se extienden los brazos del anillo dorado.
+
+> ex indicador visual
+Reza: "Acceso libre al aula de instrucción."
+
+Un poco más abajo, alguien grabó la leyenda: "No busques tu dignidad en las estrellas, sino en el gobierno de tu pensamiento."
+
+> s a ZOT S3 - Mirador
+
+> n
+
+ZOT S4 - Capitanía
+.recurso_grafico "c:\informate\prys\AventuraEspacial\res\zot.png"
+
+Pasas frente a las dependencias exclusivas de capitanía galáctica. Desde luego, con tu rango actual, sólo puedes acudir ahí dentro por invitación específica.
+
+> n 
+
+ZOT S1 - Descompresión
+.recurso_grafico "c:\informate\prys\AventuraEspacial\res\zot.png"
+
+El ascensor permite acceder a los niveles de descompresión y muelles de naves del anillo dorado. Un robot guardián bloqueador vigila el acceso al mismo.
+
+[ Robots de mantenimiento pasan periódicamente por el anillo ]
+
+> ex ascensor
+El ascensor es un tubo transparente, que de alguna forma, al introducirte en él te lleva hasta el otro extremo, sin necesidad de puertas ni nada.
+
+> ex cartel rojo
+Un cartel rojo con letras blancas indica: "Acceso a Zona de Contacto Exterior - Sólo personal autorizado."
+
+> ex bloqueador
+Un robot guardián cuya misión consiste en mantener la seguridad. Es un modelo ciertamente rudimentario, reciclado de fuerzas antidisturbios. De nada sirve tratar de razonar con él.
+
+> arriba a ZODE S1 - Descompresión
+
+> n
+
+ZOT S1 - Documental
+.recurso_grafico "c:\informate\prys\AventuraEspacial\res\zot.png"
+
+Una amplia entrada conduce a una sala de documentación desde la zona de documentación. Un cartel se sitúa encima del mismo. Hay un holograma en la entrada.
+
+> ex cartel
+Indica: "Acceso libre a la sala de documentación"
+Un poco más abajo, reza: "Recuerda: todos los seres que han existido son descendientes de una forma primordial a la que se dió vida alguna vez."
+
+> ex holograma
+Se trata de una holograma tridimensional que representa la galaxia. Cuando te fijas en alguna parte del mismo, se realiza un zoom que te permite visualizar nuevos detalles. Es fascinante.
+
+> entrar a ZODO S1 - Documentación
+> n
+
+ZOT S2 - Mantenimiento
+.recurso_grafico "c:\informate\prys\AventuraEspacial\res\zot.png"
+
+Mantenimiento puede ser accedido desde este pasillo. Por aquí suele haber mucho movimiento, personal que necesita hacer comprobaciones de sus llaves digitales o cualquier otro problema con el material o facilidades del anillo dorado.
+
+> entrar a ZOMA S2 - Mantenimiento
+
+> n
+
+ZOT S2 - Personal
+.recurso_grafico "c:\informate\prys\AventuraEspacial\res\zot.png"
+
+Una puerta con cerradura óptica conduce a las estancias de personal.
+
+> ex placa
+Reza: "Hemos amado demasiado a las estrellas como para temer a la noche eterna."
+Unas inscripciones de unas siglas (A.R.S y J.M.M.) parecen firmar la leyenda.
+Finalmente, indica "d.e.p. 3003 d.c.".
+Es escalofriante, y un ejemplo de valentía para todos.
+
+> ex puerta
+Tiene una una ranura para llave digital, de manera que sólo aquellas personas autorizadas puedan entrar a las dependencias de personal.
+
+> entrar a ZOAV S2 - Taquillas
+
+> n
+
+ZOT S3 - Ocio
+.recurso_grafico "c:\informate\prys\AventuraEspacial\res\zot.png"
+
+De la zona de esparcimiento llegan fuertes risas de comandos de descanso. Sabes que aquellos comandos que han fracasado en su misión suelen salir por aquí con muy, muy mal aspecto.
+
+> entrar a ZOES S4 - Bar
+
+> n
+
+ZOT S3 - Mirador
+.recurso_grafico "c:\informate\prys\AventuraEspacial\res\zot.png"
+
+El suelo, transparente en esta parte del anillo, se convierte en un amplio mirador espacial. En una pared aparece grabada la inscripción "A.D.".
+
+> ex inscripción
+Se puede leer claramente, "A.D."
+
+> ex mirador
+Bajas la cabeza y tienes a tus plantas uno de los más bellos e impresionantes panoramas que contemplarse puedan. La zona por sobre la cual caminas es la parte más externa del anillo dorado. A trevés del mirador espacial estás contemplando el núcleo de la galaxia, con sus tres soles centrales y las miríadas de planetas que junto a ellos se agrupan.
+
+> entrar a ZOIN S3 - Ingeniería
+
+> n a ZOT S4 - Instrucción
+.finloc
+
+ZODO S1 - Documentación
+.recurso_grafico "c:\informate\prys\AventuraEspacial\res\zodo.png"
+
+En la suave penumbra que reina en esta zona de documentación, destacan varios nichos para especímenes bien iluminados. Albergan todo el conocimiento sobre las muchas otras razas de la confederación galáctica.
+
+> salir a ZOT S1 - Documental
+
+> ex nichos
+En los nichos ves los especímenes más raros de la confederación galáctica: el saurius pedorrus, 
+el eridianus cianóticus ...
+.finloc
+
+ZOES S4 - Bar
+.recurso_grafico "c:\informate\prys\AventuraEspacial\res\zoes.png"
+
+Las partículas de los cilindros de euforia producen una densa atmósfera y hacen que la Zona de Esparcimiento esté casi en semipenumbra. Algunos comandos retornados, de otra unidad, celebran su vuelta mientras el ocupado robot de mantenimiento trata de mantener el orden.
+[El robot de mantenimiento te echa del bar, por estar en una misión "en regla".]
+
+> ex robot de mantenimiento
+Los robots de mantenimiento son todos iguales... cuando hablas con ellos es porque te falta algo, y ellos lo encuentran seguro. Por otra parte, en ocasiones se dedican también a mantener el orden, y no dudan en usar la fuerza en caso de creerlo necesario.
+
+> salir a ZOT S3 - Ocio
+> ex tarjeta de acceso
+Una tarjeta de acceso, probablemente de nivel 1, que permite acceder a las zonas de descompresión.
+> coge tarjeta de acceso
+Cogida.
+.finloc
+
+ZODE S1 - Descompresión
+.recurso_grafico "c:\informate\prys\AventuraEspacial\res\cab.png"
+
+Varias vainas, conteniendo trajes para superar los rigores espaciales, se amontonan en dos de las paredes de esta sala. Así, se puede entrar también desde aquí a la cámara estanca, aunque un indicador de color rojo situado en la parte superior de la puerta parece querer disuadirnos de ello.
+
+[Es un paso a un lugar sin gravedad.]
+
+> ex estanterías
+Alargadas, ocupan todas las paredes, a excepción de la zona estanca.
+
+> ex indicador
+PRECAUCIÓN: Sólo personal autorizado. Revise su equipo antes de entrar.
+
+> ex entrada al ascensor
+El ascensor que te ha permitido subir hasta aquí, y que también te permitirá bajar, si lo deseas.
+
+> ex traje espacial
+Es un traje mezcla hecho de una combinación de admantio, fieltro, titanio y kevlar preparado para misiones en el espacio. Cuenta con una unidad de oxígeno. A pesar de todo, incluyendo el peso algo mayor, es sólo un poco más incómodo que el traje de faena.
+
+> ex vaina
+En la vaina puedes ver un traje espacial de combate. Una ranura permite abrir la cámara mediante la llave digital de memoria.
+
+> abajo a ZOT S1 - Descompresión
+> entrar a ZODE S1 - Cámara estanca
+
+.finloc
+
+ZOAV S2 - Taquillas
+.recurso_grafico "c:\informate\prys\AventuraEspacial\res\zoav.png"
+
+Las taquillas del personal de combate (los comandos espaciales) se alinean contra las cuatro paredes.
+
+> ex taquillas
+Son todas iguales, cada una se abre con su propia llave magnética. Reconoces la tuya al instante.
+
+> ex taquilla
+Tu taquilla tiene tu nombre escrito en una pequeña etiqueta en su frontal.
+
+> ex etiqueta
+Pues eso, "Tim Gilberts".
+
+> ex PDA
+Tu PDA personal, que te permite manejar cómodamente tus datos personales y de trabajo. Una ranura permite la entrada de llaves de memoria.
+
+> salir a ZOT S2 - Personal
+.finloc
+
+ZOMA S2 - Mantenimiento
+.recurso_grafico "c:\informate\prys\AventuraEspacial\res\cab.png"
+
+Mantenimiento es una gran sala donde los robots de mantenimiento trastean arreglando cosas.
+[Los robots de mantenimiento están demasiado ocupados para ayudarte.]
+
+> ex robots de mantenimiento
+Los robots de mantenimiento están todos ocupados en sus quehaceres.
+
+> salir a ZOT S2 - Mantenimiento
+.finloc
+
+ZOCA S4 - Capitanía
+.recurso_grafico "c:\informate\prys\AventuraEspacial\res\zoca.png"
+
+Aunque ahora te encuentras en uno de los diversos anexos para reuniones más informales, la sala de capitanía es una gran cabina de reuniones donde se deciden cuestiones importantes de la Confederación Galáctica, así como se planean diferentes misiones.
+[Aquí se produce una conversación entre el capitán y el protagonista, en la que se le encarga acabar con uno de los detectores de amenazas, absolutamente fuera de control.]
+
+> ex capitán
+Un hombre regordete y aparentemente afable, si bien rígido y disciplinado en el trato.
+
+> ex llave digital de memoria
+Es una pequeña tarjeta que contiene todos tus datos biométricos, así como puede albergar datos sobre tu misión y permisos de acceso.
+
+> salir a ZOT S4 - Capitanía
+.finloc
+
+ZODE S1 - Cámara estanca
+.recurso_grafico "c:\informate\prys\AventuraEspacial\res\cades.png"
+
+La cámara estanca es un pequeño lugar de transición con dos puertas. Has entrado por una que ahora está cerrada, y también está la que se encuentra delante de ti.
+
+> ex botón
+Un pequeño panel en su parte inferior informa: "Compresión/descompresión"
+
+> salir a ZOBA S1 - Bahías
+.finloc
+
+ZOBA S1 - Bahías
+.recurso_grafico "c:\informate\prys\AventuraEspacial\res\zoba.png"
+
+De fondo, el telón tachonado de estrellas es recortado por las diferentes naves estacionadas, algunas, como destructores de combate, de gran tamaño, y otras, como los pequeños vehículos espaciales, parecen empequeñecerse a su lado.
+
+> ex vespas
+Todos suelen llamar a estas naves VESPAs, por un juego de palabras proviniente de su nombte Vehículos ESPAciales. Nadie sabe lo que significa "vespa", pero es gracioso. Todas ellas están en periodo de mantenimiento, menos una con su escalera ya colocada.
+
+> ex vespa
+La vespa de la escalerillas tiene una ranura para llave magnética.
+
+> entrar a VESPA - Navegación
+.finloc
+
+VESPA - Navegación
+.recurso_grafico "c:\informate\prys\AventuraEspacial\res\vespa.png"
+
+Los controles indican que la vespa está preparada para comenzar la exploración.
+
+.finloc
+
+ZOIN S3 - Ingeniería
+.recurso_grafico "c:\informate\prys\AventuraEspacial\res\cab.png"
+
+Desde luego, puedes apostar que nunca habías estado en este lugar. Se te antoja como si estuvieras viendo en directo las entrañas del anillo. Lo cierto es que reconoces la típica estructura de una de tantas cabinas de la nave, pero sucia y desaliñada también.
+
+> ex ingeniero
+Una persona a juego con la cabina (es decir, desaliñado y sucio), está sentado tras un panel de controles, leyendo en su PDA. Usa gafas y es, de todos los individuos del Anillo, el mayor con diferencia.
+
+> ex panel de controles
+Diferentes botones y palancas, que, por cierto, debieron caer en desuso hace décadas.
+
+> ex arnés
+El arnés te lo puedes ceñir al traje y permite asegurarte mediante una larga cuerda.
+
+> coge arnés
+Cogido.
+
+> ponte el arnés
+Puesto.
+
+> afuera a ZOT S3 - Mirador
+
+> abajo
+
+ZODE S3 - Esclusa estanca
+.recurso_grafico "c:\informate\prys\AventuraEspacial\res\cades.png"
+
+La pequeña esclusa tiene apenas tamaño para albergar a una sola persona. Las salidas por encima y por debajo permiten pasar a la zona de control semiautomático del Anillo Dorado.
+
+> ex ratas
+¡Increíble...! Una colonia de ratas corretea por todo la esclusa, apareciendo y desapareciendo por uno de los tubos de expulsión de gases. Nunca hubieras dicho que en el AD había ratas, pero desde luego, este es el sitio más indicado para encontrarlas.
+
+> ex gancho
+La argolla permite asegurarse con un arnés.
+
+> abajo
+
+ZOMA S3 - Controles
+.recurso_grafico "c:\informate\prys\AventuraEspacial\res\cab.png"
+
+El hueco es reducido, pero aún así suficientemente grande para que quepan cuatro personas al mismo tiempo. La pared del anillo que debería separar esta estancia del espacio exterior no existe, y, de hecho, puedes ver sin dificultad las compuertas de las bahías del Anillo Dorado.
+
+> ex controles automáticos
+Varios botones y palancas, con diferentes etiquetas, que controlan el estado de varios aspectos del anillo. Una de las palancas te llama la atención por su etiquetado.
+
+> ex palanca automática
+Está etiquetada como "apertura de compuertas exteriores".
+
+> ex controles manuales
+Los controles manuales, en la pared contraria están formados exclusivamente por palancas. En la parte superior, se avisa de la eventualidad de que las palancas no se rigen por el sistema automático de control del anillo. Una de las palancas tiene una descripción interesante.
+
+> ex palanca manual
+Está etiquetada como "apertura de compuertas exteriores".
+
+> salir
+
+Exterior del anillo
+.recurso_grafico "c:\informate\prys\AventuraEspacial\res\exteriorAD.png"
+
+Agarrado a un saliente, las compuertas exteriores están exactamente a tu espalda. El resto del inmenso anillo te rodea sobrecogedoramente. El sentimiento de agonía y el terrible miedo se acentúan por el hecho de que sólo puedes oirte a ti mismo respirar entrecortadamente. 
+.finloc

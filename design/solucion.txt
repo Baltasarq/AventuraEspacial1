@@ -1,0 +1,46 @@
+Solución a "La aventura espacial"
+Remake para la II RetroComp de la aventura de AD del mismo título.
+	por Baltasarq
+
+Introducción
+------------
+
+Aparecemos en el aula de instrucción. Con esperar un poco, o intentar movernos, acabaremos en Capitanía,
+donde el capitán estelar nos asignará la misión.
+
+Los primeros pasos a dar son: ir a personal a recoger la PDA, e ir a la ZODE para entrar en los hangares
+del anillo.
+
+Sin embargo, la llave digital de memoria no funcionará. Esto se solucionará yendo a mantenimiento, y hablando
+con los robots o dándoles directamente la llave.
+
+Ya en la zona de descompresión, nos ponemos el traje espacial (hay que abrir la vaina previamente), y ponemos
+la PDA en la base, para finalmente hablar por el comunicador.
+
+Aquí empiezan los problemas. Si hablamos varias veces con el supervisor, nos enterarmos de que las compuertas
+de los hangares se han cerrado. También se puede consultar la PDA.
+
+Aquí hay un momento de desorientación... ¿qué hacer?
+Si acudimos a mantenimiento, veremos que los robots están ensimismados, ocupados probablemente, tratando de
+reparar la avería. El robot de mantenimiento del bar nos sugerira que acudamos a ingeniería.
+
+Si reparamos en el mapa, en la zona del mirador hay una pequeña puerta. Entramos y hablamos con el ingeniero,
+quien nos indica que por allí ya no pasa nadie. Bajamos a las conducciones inferiores, y tratamos de buscar
+el DAAD. Sin embargo, es bastante probable que no lo encontremos. Si volvemos a subir y hablamos con el ingeniero,
+nos dará un arnés con una brújula y una cuerda. Volvemos a bajar y buscamos un pasaje con una salida hacia
+abajo. Ahora que vamos dejando un "rastro" con la cuerda, podemos cubrir fácilmente todos los pasajes sin perdernos.
+TRUCO: Si entramos "salta", entonces nos indica la posición en la que estamos. La destino es la 8:7
+
+Ya en el DAAD, empujamos la palanca manual, y con ello, acabamos en el espacio. Moriremos si no llevamos el
+traje espacial puesto, pero lo más probable es que lo llevemos debido al proceso de inspección en la ZODE.
+Acabaremos en un saliente. La solución, teniendo en cuenta que las compuertas de los hangares (ahora abiertas)
+están a nuestra espalda, y que estamos en el vacío, consiste en lo siguiente: tirar del saliente y empujar la pared.
+
+Con esto acabaremos de nuevo en capitanía, ascendidos a sargento de comandos espaciales.
+
+Ahora vamos a mantenimiento, y les damos la PDA o hablamos con los robots para que la carguen.
+Volvemos a la zona de descompresión, y repetimos el proceso. Ahora todo estará bien. Cogemos la PDA y se abren
+las compuertas.
+
+Subimos a la esclusa y salimos a los hangares. Subimos a la Vespa, y ponemos la PDA en la base.
+Enhorabuena, has terminado "La aventura espacial: en el anillo dorado" (el remake).

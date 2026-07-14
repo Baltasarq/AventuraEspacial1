@@ -1,0 +1,977 @@
+
+Include "Responde";
+
+Character jugador "Bertrand Gil"
+with
+    apellido "Gil",
+    name 'bertrand',
+    short_name "Bertrand Gil",
+    categoria [;
+        if ( self.acceso == 8 )
+                return "Soldado de Primera";
+        else    return "Sargento de Comandos Espaciales";
+    ],
+    acceso 8,
+    description "Enfundado en tu mono espacial, y con una larga barba, como todos... desde hace mucho tiempo.",
+    react_before [;
+        Jump:
+            if ( location == pasajeLaberinto ) {
+                print "^", pasajeLaberinto.x, ":", pasajeLaberinto.y, "^";
+            }
+    ],
+    react_after [;
+        if ( action == ##Take or ##Drop or ##Wear or ##Disrobe ) {
+            Planificador.actualizarInventario();
+        }
+        else
+        if ( action == ##Look or ##Go or ##GoIn or ##Enter or ##Exit ) {
+            Planificador.actualizarVentanas();
+        }
+
+        rfalse;
+    ],
+    each_turn [;
+        if ( ( turns % 9 ) == 0 
+           && location ofclass ZOT )
+        {
+            playSnd1( sndKruguer, 1, SMW_VOLUME_NORMAL );
+            print "^La estructura del anillo tiembla ante el despegue de un crucero estelar...^";
+        }
+    ],
+has proper;
+
+Character pnjBLOQUEADOR "bloqueador" ZOT_S1___DESCOMPRESION
+with
+    activado true,
+    name 'BLOQUEADOR' 'robot' 'BLOQUEATOR' 'ranura' 'guardia' 'guardian',
+    description "Un robot guardián cuya misión consiste en mantener la seguridad. Es un modelo ciertamente rudimentario, reciclado de fuerzas antidisturbios. De nada sirve tratar de razonar con él. Una ranura de tarjetas de memoria se le ha insertado en el pecho, para desactivarlo.",
+    react_before [;
+        Go:
+            if ( noun == u_obj
+              && self.activado == true ) 
+            {
+                "El robot bloqueador se interpone entre el ascensor de la cabina y tú.
+                 Imposibe pasar, ni razonar.";
+            }
+    ],
+    react_after [;
+        Go:
+            if ( noun == u_obj ) {
+                self.activado = true;
+            }
+    ],
+    before [;
+    ],
+    conversation [;
+        "Símplemente, ni reacciona.";
+    ],
+has   ;
+
+Character pnjCAPITAN "capitán galáctico" ZOCA_S4___CAPITANIA
+with
+    nombrePropio "Capitán galáctico Lhanudyo",
+    article "al",
+    name 'CAPITAN' 'galactico' 'lhanudyo',
+    short_name "capitán galáctico",
+    description "Un hombre regordete y aparentemente afable, si bien rígido y disciplinado en el trato.",
+    react_before [;
+        Go:
+            self.say( "¿A dónde se cree que va?" );
+            self.say( "¡Señor Gil! ¡Firmes!" );
+            print "Te pones rígido ante la voz de mando, tu atención totalmente centrada en el capitán.^";
+            wait();
+            <<tell self>>;
+    ],
+    conversation [;
+        if ( self.status == 0 ) {
+            print "El hombre te mira, como evaluándote, y después aparta la mirada, aparentando concentrarse en su bebida.^";
+            wait();
+            self.say( "Soy el capitán galáctico Lhanudyo, responsable de esta nave." );
+            self.toProperName( self.nombrePropio );
+            self.say( "Estamos buscando un voluntario para una misión muy peligrosa." );
+            print "^";
+            player.think( "¡Increíble...! Acabo de graduarme y ya me dan una oportunidad." );
+            player.say( "¡Soy su hombre, señor!" );
+            print "El capitán mueve la cabeza lentamente, hacia los lados.^";
+            self.say( "Lo cierto es que no, no lo eres." );
+            player.say( "Señor... reconozco estar confuso." );
+            self.say( "Necesitamos a alguien que acepte una misión muy peligrosa, y que, a la vez, sea un desconocido en absoluto por la guerrilla planetaria. Al ser recién graduado, tú reúnes tan efímeras... cualidades. ¿Sigues interesado?" );
+            print "^";
+            player.think( "Vaya... no hace que me sienta mejor." );
+            player.say( "Sí, señor." );
+            print "El hombre toma una pausa y asiente lentamente.^";
+            self.say( "Bien. Tenemos un problema con uno de nuestros satélites de ataque preventivo, en los límites de la Confederación Galáctica." );
+            player.say( "Comprendo, señor." );
+            self.say( "No lo creo. Estos satélites están diseñados para eliminar amenazas exteriores a la confederación, detectándolas antes que nadie y eliminándolas preventivamente. Son potencialmente, y extremadamente peligrosos, y, en este caso, uno de ellos ha caído de alguna forma en manos de los rebeldes, y lo han modificado para atacarnos a nosotros." );
+            print "^El capitán hace una pausa. En realidad, la agradeces, pues en verdad te cuesta digerir tal información.";
+            wait();
+            self.say( "Hemos perdido dos Destructores Estelares ya. La fuerza bruta no sirve. Probablemente, han encontrado una forma de potenciar la fuerza destructora del satélite." );
+            print "Frunces el ceño.^";
+            wait();
+            player.say( "Es terrible, señor." );
+            print "^El capitán lanza un suspiro.^";
+            wait();
+            self.say( "Sí lo es. Y es peor todavía tener que confiarle a alguien... como tú." );
+            self.say( "Eso no es todo. Irás bastante desprotegido. El vehículo que podemos darte para esta misión es una AVISPA." );
+            player.say( "¿Una VESPA?" );
+            print "^El capitán resopla, divertido, y asiente con la cabeza.^";
+            wait();
+            self.say( "Sí. Exacto. Eso es." );
+            self.say( "Cualquier nave estelar más grande sería detectada como amenaza por el satélite." );
+            player.say( "Comprendo, señor." );
+            print "^El capitán te mira, incrédulo, pero no dice nada.^";
+            wait();
+            self.say( "Deme su llave de memoria." );
+            print "Le entregas tu llave...^";
+            wait();
+            self.say( "Las instrucciones adicionales se encuentran ahora en su llave digital, así como los permisos necesarios." );
+            self.say( "Su misión consistirá en llegar al satélite y destruirlo. No podemos arriesgarnos." );
+            self.say( "Debe entrar en el satélite y reprogramarlo para su autodestrucción. ¿Está claro?" );
+            player.say( "¡Sí, señor!" );
+            print "^El capitán te devuelve la llave.^";
+            wait();
+            self.say( "Prepárese para la misión. ¿Tiene su PDA?" );
+            player.say( "Sí señor. En mi taquilla." );
+            self.say( "De acuerdo, recójala y vaya a la zona de descompresión. Allí encontrará un traje de combate esperando. Tome su AVISPA y parta sin más dilación. Una vez en la nave, encontrará más detalles de la misión en la computadora de abordo, accesibles a través de su llave. Se mantendrá el silencio total en cuanto a comunicaciones. Esta misión es secreta de nivel 0." );
+            player.say( "¡Sí, señor!" );
+            self.say( "Parta ya." );
+            print "Sales de capitanía. La emoción y las dificultades inherentes, así como la sensación de peligro, te invaden, sin que puedas reconocer cuál es más fuerte.^";
+            
+            self.status++;
+            move objLLAVE_DIGITAL_DE_MEMORIA to player;
+            playerTo( ZOT_S4___CAPITANIA );
+        }
+        else
+        if ( self.status == 1 ) {
+            print "Uno de los pComandos, se inclina sobre el capitán para
+                   susurrarle algo al oído."
+            ;
+            wait();
+            print " Este se vuelve y le mira fijamente durante un segundo. A continuación,
+                   vuelve la vista hacia ti y hace un breve gesto con la mano, de manera
+                   que los pComandos se ponen firmes y se retiran."
+            ;
+            self.say( "Tengo que reconocer que cometí un error contigo." );
+            self.say( "Realmente, debes de ser muy válido para hacer lo que parece que has hecho." );
+            print "^El capitán se inclina ligeramente hacia ti.";
+            self.say( "Pero por favor... dime lo que has hecho... exactamente." );
+            
+            print "^A continuación, relatas tu historia, tratando de no omitir ningún detalle.";
+            player.say( "Pero... hay algo más." );
+            print "^El capitán se sorprende sinceramente.";
+            self.say( "¿Algo más?" );
+            player.say( "Cuando salí despedido del DAAD..." );
+            print "^El capitán resopla, y sonríe para sí...";
+            self.say( "Si es que tal complejo de control existe o pudiera existir..." );
+            print "^Ignoras el comentario del capitán. De hecho te sientes irritado porque te haya interrumpido.";
+            player.say( "En cualquier caso, salí despedido de allí. No fue un error o un accidente.
+                        Estoy seguro de que quisieron acabar con mi vida."
+            );
+            self.say( "¿Pero, quien?" );
+            player.say( "¿Quien estaba allí?¿Quien sabía que yo estaba allá abajo?" );
+            self.say( "Pero eso... significaría que tenemos saboteadores. ¡Aquí, en el propio Anillo Dorado!" );
+            player.say( "Es ciertamente terrible, señor." );
+            print "^El rostro del capitán estelar se torna taciturno.";
+            print " Con una mano, se mesa la barba lentamente.";
+            self.say( "Está bien. Confíeme a mi ese problema." );
+            self.say( "Usted parta." );
+            print "El capitán te mira, con destellos de viveza en sus ojos.^";
+            self.say( "Salid ya en vuestra VESPA, y acabad con la oscura amenaza." );
+            self.say( "Dependemos de usted..." );
+            self.say( "Sargento Gil." );
+            print "^Abres mucho los ojos... no puedes creerlo. Conoces el procedimiento, por lo que le tiendes
+                    tu llave al capitán, que te la devuelve tras una breve manipulación en su consola";
+            wait( "..." );
+            print "^^El capitán se incorpora y te saluda marcialmente.";
+            self.say( "Enhorabuena, sargento." );
+            print "^Profundamente emocionado, devuelves el saludo, y te deshaces
+                   en gracias hacia el capitán";
+            wait( "..." );
+            print "^Acto seguido, abandonas la estancia, con gran urgencia de emprender tu magna tarea.^";
+            wait();
+        
+            player.acceso++;
+            pasar_a_ConexionesAnillo();
+            playerTo( ZOT_S4___CAPITANIA );
+        }
+    ],
+    setFinalConversation [;
+        self.status = 1;
+    ]
+has   ;
+
+Character pnjCOMANDOS "comandos" ZOED_S4___AULA
+with
+    name 'COMANDOS',
+    description "Todos escuchan con atención al gran maestro.",
+    conversation [;
+        print "Uno de ellos se da la vuelta y te manda callar, de malos modos.^";
+        rtrue;
+    ],
+has  pluralname ;
+
+Responde msgsGente
+private
+    elementos
+        "Un grupo de comandos pasa a tu lado apresuradamente"
+        "Dos personas, enfundadas en un mono de personal de asistencia
+        del anillo, te rodean al pasar mientras charlan animadamente"
+        "Un pequeño grupo de comandos, probablemente retornados de alguna
+         misión, ríen entre ellos mientras avanzan por el anillo"
+        "Dos personas de asistencia caminan rapidamnte, con gesto grave"
+        "Un grupillo de pilotos mercantes se ríe a caracajadas, despreocupadamente"
+        "Un comando espacial pasa a tu lado, mascullando para sí"
+        "Varios oficiales se cruzan contigo"
+        "Dos ingenieros avanzan por el anillo, con el ceño fruncido"
+        "Dos pilotos de combate gritan bravuconamente"
+        "Varios pComandos patrullan"
+        "Dos pComandos vigilan, con ese aire suyo tan característico"        
+        "Tres asistentes de capitanía te rodean al cruzarse contigo"
+        "Cuatro administrativos pasan de largo"
+        "Varios ingenieros se cruzan contigo"
+        "Un grupo de reclutas pasan de largo. Seguro que se dirigen al aula de instrucción"
+        "Varios oficiales caminan a grandes zancadas por el anillo"
+        "Personal de mantenimiento se paran a hablar cerca de ti, para a continuación proseguir la marcha"
+        "Uno de los capitanes se acerca acompañado de varios tenientes"
+        "Varios reclutas caminan por el anillo"
+        "Dos reclutas se detienen a hablar durante un momento"
+        "Un par de oficiales se detiene a hablar durante un momento"
+        "Una pareja de pComandos se cruza contigo"
+        "Una patrulla de pComandos, seguramente de ronda, pasa por tu lado"
+;
+
+Responde escucharGente
+private
+    elementos
+        "¿Sabes lo último de Capitanía? Parece que van a cambiar las Correas de Aspecto Automático-Dinámico de todas las Vespas"
+        "Dicen que van a retirar las antiguas interfaces de texto por unas de realidad virtual. ¿Tú que piensas? ..."
+        "- Dicen que un solo comando va a enfrentarse a la oscura amenaza y neutralizarla...^- No me hagas reir..."
+        "- Ya sabes, yo siempre lo dije, no se le puede confiar tanto a una simple máquina..."
+        "- ¿Y sabes algo del siguiente lanzamiento?^- Creo que es algo relacionado con unos robots en un planeta perdido..."
+        "- ¿Y a ti te gustan más los relatos Jarelianos o Melythonianos?^- A mi me gustan más los de Jhames."
+        "Yo creo que Xi-Ka es la tía más buenorra del universo."
+        "Hace tiempo que no leo nada, debería volver a empezar."
+        "Pues lo desconozco, pero..."
+        "... no sabría decirlo, sin embargo..."
+        "Me gustaría volver a tener esa sensación, ¿sabes?, como cuando descubres un pasadizo en una aventura."
+        "Pues sí, estoy trabajando en Nearco XXXIX.^- Pues yo, en ~La venganza de Juan~"
+        "- Mira, pone ~Don't panic~"
+        "- Lo que yo te diga, los últimos trabajos de Scot Addams no valen para nada."
+        "- ¿Los de Sierra?... unos traidores, te lo digo yo..., tanto gráfico, tanta..."
+        "En la zona de esparcimiento se pueden conocer a chicas interesantes..."
+        "- Lo llaman ~La oscura amenaza~.- Yo la única amenaza oscura que conozco es la boca del retrete automatizado."
+        "No puedo decir si realmente los rebeldes se habrán inflitrado ya en la confederación. Espero que no."
+        "No estoy seguro..."
+        "Pero..."
+        "Es que..."
+        "Además, piensa en..."
+        "Te lo estoy diciendo, es lo que yo digo..."
+        "Lo que yo digo, es que..."
+        "No, no lo creo. Además..."
+        "No, y no, te lo estoy diciendo..."
+        "Te lo digo, te lo repito, y no te enteras."
+        "... ten en cuenta que el anillo dorado fue construido hace muchos años, y que su corazón sigue siendo el DAAD..."
+        "¿Has visto el último reportaje de Xi-Ka?... ¡Increíble!"
+        "De verdad os lo digo, nunca había visto un relato tan rápido como ~Asalto y...~^- Maldita sea. ¿Cómo se llamaba?"
+;
+
+Character pnjGente "gente a tu alrededor"
+with
+    found_in [;
+        if ( location ofclass ZOT
+          && planificador.ad_statusOk )
+                rtrue;
+        else    rfalse;
+    ],
+    article "a",
+    name_f  'GENTE',
+    name_m  'personal',
+    name_mp 'COMANDOS' 'pcomandos' 'asistentes' 'pilotos' 'oficiales',
+    name_fp 'personas',
+    description "Todos pasan de largo, ocupados en sus quehaceres.",
+    conversation [;
+        "Nadie te presta atención.";
+    ],
+    daemon [;
+        if ( turns % 5 == 0 ) {
+            if ( self.found_in() ) {
+                print (string) msgsGente.dev_msg(), ".^";
+            }
+        }
+    ],
+    react_before [;
+        Listen:
+            if ( noun == Nothing ) {
+                <<Listen self>>;
+            }
+    ],
+    before [;
+        Listen:
+            print (string) msgsGente.dev_msg(), ".^";
+            self.say( escucharGente.dev_msg() );
+            rtrue;
+    ],
+has  female;
+
+Character pnjINGENIERO "ingeniero" ZOIN_S3___INGENIERIA
+with
+    tunelVisitado [;
+        if ( self.status < 2 ) {
+            self.status = 2;
+        }
+    ],
+    properName "Jaime Irtuburu Hernández Pardo",
+    shortProperName "Jaime",
+    short_name "ingeniero",
+    name_m 'INGENIERO',
+    name_f 'PDA',
+    description "Una persona a juego con la cabina (es decir, desaliñado y sucio), está sentado tras un panel de controles, leyendo en su PDA. Usa gafas y es, de todos los individuos del Anillo, el mayor con diferencia.",
+    conversation [;
+        if ( self.status == 0 ) {
+            self.say( "Hola, joven, ¿que le trae por aquí?" );
+            
+            if ( planificador.ad_statusOk ) {
+                player.say( "Bueno, yo ..." );
+                self.say( "¿Todavía no sabe lo que quiere?" );
+                print "^El hombre casi te escupe a la cara.";
+                self.say( "¡Vete ya y no me hagas perder el tiempo!" );
+                return;
+            }
+            
+            player.say( "Mi nombre es Gil. Tengo una importante misión, y necesito salir con una VESPA." );
+            self.say( self.properName );
+            self.say( self.shortProperName );
+            self.say( "Para los amigos." );
+            self.toProperName( self.shortProperName );
+            print "^El hombre echa una breve ojeada a los controles.";
+            self.say( "Me temo que no va a poder ser. Las compuertas exteriores de los hangares están cerradas." );
+            print "^El ingeniero vuelve a su PDA.";
+            player.say( "¡Es terrible!... tengo que hacer algo." );
+            print "^El ingeniero te contempla brevemente.";
+            self.say( "No se apresure, joven, seguro que en breve los robots de mantenimiento lo arreglan." );
+            print "^Miras con angustia los controles...";
+            player.say( "¿No es posible abrirla desde aquí?" );
+            print "^El hombre musita una respuesta, sin siquiera mirarte.";
+            self.say( "No." );
+            player.say( "Oh." );
+            print "^Tratas de no rendirte.";
+            player.say( "Escuche, estoy en una misión urgente de alta prioridad, y... ¡tengo que salir en una VESPA!" );
+            print "^El ingeniero te contempla ahora pausadamente.";
+            self.say( "¿Tan importante que ni siquiera puede esperar a que los robots de mantenimiento se ocupen de ello?" );
+            print "^Decides arriesgarlo todo a una carta.";
+            player.say( "Es más que probable que haya sido una operación de sabotaje." );
+            print "^El ingeniero te mira de hito en hito, como sopesando sus posibilidades.";
+            self.say( "Está bien, cuando se trata de una emergencia, se trata de una emergencia." );
+            print "^El hombre pulsa uno de los botones.^";
+            wait();
+            print "^Sin mirarte, vuelve a su PDA.^";
+            player.say( "¿Ya está?" );
+            print "^El hombre resopla, y deja de nuevo su PDA aparte.";
+            self.say( "Sí." );
+            print "^Le miras de nuevo, dubitativo.";
+            player.say( "¿Ya se han abierto las compuertas?" );
+            print "^El hombre se ríe.";
+            self.say( "Me temo que no." );
+            player.say( "Entonces, ... ¿no?..." );
+            self.say( "He activado la esclusa que permite el paso a las conducciones inferiores, en el nivel 0." );
+            print "^Te cuesta un momento concentrarte.";
+            player.say( "¿Ahí abajo?¿Para?" );
+            print "^El ingeniero adopta un aire paciente y compasivo.^";
+            self.say(
+                "El Anillo Dorado, como toda la maquinaria elaborada por la confederación,
+                se ha construido con una capa sobre otra. Cada nueva tecnología ha ido cubriendo a la anterior, y,
+                así, todo el mundo cree que los robots de mantenimiento son la única respuesta ante un mal
+                funcionamiento."
+            );
+            player.say( "¿Y no es así?" );
+            self.say( "No." );
+            print "^Ahora, sus ojos brillan, mientras procede a explicar todo lo que sabe,
+                   inclinándose sobre ti.";
+            self.say( "Sólo yo soy suficientemente viejo como para recordarlo." );
+            self.say( "Sin embargo, en el corazón del AD, hay una maquinaria primigenia, anticuada hoy en día,
+                       que ya nadie usa, desplazada por la nueva tecnología."
+            );
+            print "^Estás demasiado estupefacto como para articular palabra. Además, ahora el ingeniero
+                   parece hasta intimidante.^";
+            self.say( "Como todas las máquinas construídas por la confederación, el cerebro del AD, es el... DAAD." );
+            print "^Ha abierto mucho la boca, y durante mucho tiempo, alargando las siglas,
+                   absolutamente desconocidas para ti. Es obvio que está disfrutando.^";
+            player.say( "¿DA-AD?" );
+            self.say( "Sí, sí, el Director Automatizado del Alteración Dinámica." );
+            print "^Sacudes la cabeza brevemente.";
+            player.say( "No... no entiendo nada." );
+            print "^El ingeniero chasquea los dientes con impaciencia.";
+            self.say( "Te lo resumire, chaval. Ahí abajo hay una palanca con una etiqueta que pone ~Compuertas exteriores~." );
+            print "^Abres la boca, sorprendido.";
+            self.say( "Si la bajas, se abrirán." );
+            print "^Te alegras de recibir buenas noticias, por fin, y te diriges hacia la esclusa.^";
+            self.say( "Sólo hay un pequeño problema." );
+            print "^Suspiras. Era demasiado fácil.";
+            player.say( "¿Cuál?" );
+            self.say( "Tienes que encontrar el camino entre las conducciones." );
+            print "^Ahora, su rostro se encuentra vacío, como repentinamente cansado.";
+            self.say( "Soy demasiado viejo como para recordar el recorrido." );
+            print "^El anciano vuelve a su PDA, ya sin prestarte atención.";
+            self.say( "Espero que tenga suerte." );
+            
+            botonDesc.activado = true;
+            self.status++;
+        }
+        else
+        if ( self.status == 1 ) {
+            self.say( "Baje a las conducciones y busque el DAAD, joven." );
+        }
+        else
+        if ( self.status == 2 ) {
+            if ( planificador.ad_statusOk ) {
+                self.status = 4;
+                self.say( "Vaya... veo que ha conseguido abrir las puertas..." );
+                player.say( "Tú... me traicionaste." );
+                self.say( "Oh, bueno... muy dramático. ¿No?" );
+                self.say( "¿Cuál es el motivo de su disgusto?" );
+                print "^Prefieres no seguir hablando... El anciano menea la cabeza.";
+                self.say( "Estos jóvenes..."  );
+                self.status ++;
+                rtrue;
+            }
+        
+            self.say( "¿Bueno, hubo suerte?" );
+            print "El hombre lanza una breve mirada al panel de controles.^";
+            self.say( "Supongo que no." );
+            player.say( "No puedo encontrarlo, ¡hay túneles y más túneles en todas direcciones!" );
+            print "^El ingeniero suspira.";
+            self.say( "Quizás puedas utilizar un artilugio que tengo por aquí." );
+            print "^Jaime se agacha un momento...";
+            self.say( "Aquí está: un arnes." ); 
+            print "^Miras el cachivache, extrañado.";
+            jugador.say( "¿Y cuál es su utilidad?" );
+            print "^Tras un suspiro, adopta de nuevo su aire compasivo, y pasa a explicarte sus secretos.";
+            self.say( "Tiene una cuerda. Átala a la argolla de la esclusa, y de esa forma no te perderás." );
+            print "^Jaime vuelve rápidamente a su PDA. Debe estar interesantísima.^";
+            
+            move objARNES to jugador;
+            self.status = 3;
+        }    
+        else
+        if ( self.status == 3 ) {
+            print "Tras un nuevo suspiro, levanta la vista de su PDA.";
+            self.say( "Tú misión, ¿no era muy urgente?" );
+        }
+        else
+        if ( self.status == 5 ) {
+            print "Tras un nuevo resoplido, levanta la vista de su PDA.";
+            self.say( "Joven, tú misión, ¿no era muy urgente?" );
+        }
+    ],
+has   ;
+
+Character pnjMAESTRO "maestro" ZOED_S4___AULA
+with
+    name 'MAESTRO' 'profesor',
+    description "Los grandes maestros galácticos imparten charlas a los comandos que les permiten manejarse en cualquier situación conocida.",
+has   ;
+
+Character pnjRATAS "ratas" ZODE_S3___ESCLUSA_ESTANCA
+with
+    name 'RATAS',
+    description "¡Increíble...! Una colonia de ratas corretea por todo la esclusa, apareciendo y desapareciendo por uno de los tubos de expulsión de gases. Nunca hubieras dicho que en el AD había ratas, pero desde luego, este es el sitio más indicado para encontrarlas.",
+    conversation [;
+        player.think( "Mmm... quizás me estoy acostumbrando demasiado a estar solo..." );
+        rtrue;
+    ],
+    before [;
+        kiss, touch, take, taste:
+            player.think( "No pienso siquiera acercarme a esos cubos de basura con patas." );
+            rtrue;
+        Attack:
+            "Intentas patear a una, pero fallas estrepitosamente.";
+    ],
+has female pluralname;
+
+Thing objRATAS_MUERTAS "ratas muertas" limbo
+with
+    name_f 'rata' 'muerta',
+    name_fp 'ratas' 'muertas',
+    description
+        "Varios cadáverese de algunas ratas. Sencillamente asqueroso.",
+    before [;
+        Examine:
+            rfalse;
+        default:
+            player.think( "No pienso acercarme a esas ratas asquerosas." );
+            rtrue;
+    ],
+has female pluralname;
+
+! [ Robots de limpieza pasan periódicamente por el anillo ]
+Character RobotsLimpieza "robots de limpieza"
+with
+    turnosEspera 0,
+    name 'robots' 'limpieza',
+    description "Son pequeñas máquinas totalmente automatizadas, que limpian las Zonas de Tránsito contínuamente, para que todo esté limpio.",
+    conversation [;
+        self.header();
+        print " te ignoran totalmente. Están a lo suyo.^";
+        rtrue;
+    ],
+    daemon [dest;
+        self.turnosEspera++;
+        if ( ( self.turnosEspera % 4 ) == 0 ) {
+            if ( location == parent( self ) ) {
+                print "^Tras dejar todo limpio y reluciente, el batallón de robots de limpieza continúa su recorrido por el anillo.^";
+            }
+
+            dest = parent( self );
+            dest = dest.n_to;
+            move self to dest;
+
+            if ( location == parent( self ) ) {
+                print "^Un batallón de robots de limpieza llega haciendo su recorrido, limpiándolo todo a su paso.^";
+            }
+        }
+        else {
+            if ( location == parent( self ) ) {
+                print "^Los robots están dejándolo todo brillante.^";
+            }
+        }
+
+        rtrue;
+    ],
+    init [;
+        move self to ZOT_S2___PERSONAL;
+        startDaemon( self );
+    ],
+has pluralname;
+
+[ reparacionLlave self;
+    print "El robot tiene en la mitad de su cuerpo una ranura para llaves, ",
+                      "donde introduce la tuya.^";
+    wait();
+    self.say( "Análisis... " );
+    self.say( "Comando espacial" );
+    self.say( player.short_name );
+    self.say( player.categoria() );
+    print "^El robot se sume en un estado de aparente inactividad";
+    wait( "..." );
+    self.say( "Fallo en cluster 0D00AFFB detectado..." );
+    self.say( "Marcando cluster como erróneo..." );
+    print "^Ahora mueve la cabeza adelante y atrás, emitiendo un sonido extraño, como de raspones sobre metal.";
+    self.say( "Formateando..." );
+    print "^El robot acerca su cara a ti.";
+    wait();
+    self.say( "Escáner retinal." );
+    print "^Ahora vuelve a su posición de reposo.";
+    self.say( "Identidad comprobada. Verificando..." );
+    self.say( "Proceso completado." );
+    print "Tras unos breves instantes, saca tu llave de su ranura y la recoges de su mano.^";
+    wait();
+    player.say( "Gra-gracias." );
+    objLLAVE_DIGITAL_DE_MEMORIA.incrementaNivel();
+    self.say( "Accedidos los bancos de datos y actualizado los permisos y detalles de su misión." );
+];
+
+! [Los robots de mantenimiento están demasiado ocupados para ayudarte cuando se produce la avería.]
+Character pnjROBOTS_DE_MANTENIMIENTO "robots de mantenimiento"
+with
+    init [;
+        move self to ZOMA_S2___MANTENIMIENTO;
+    ],
+    name_mp 'ROBOTS' 'mantenimiento',
+    name 'robot' 'mantenimiento',
+    description "Los robots de mantenimiento están todos ocupados en sus quehaceres.",
+    nadaQueHacer [x;
+        "Los robots no encuentran nada que hacerle ", (al) x, ".";
+    ],
+    conversation [;
+        if ( second == Nothing ) {
+            if ( planificador.ad_arreglado )
+                    second = objPDA;
+            else    second = objLLAVE_DIGITAL_DE_MEMORIA;
+        }
+    
+        if ( planificador.ad_arreglado
+          && objPDA in jugador )
+        {
+            if ( second ~= objPDA ) {
+                return self.nadaQueHacer( second );
+            }
+            
+            player.say( "Mi PDA necesita una recarga..." );
+            self.say( "A la orden..." );
+            print "^El robot de mantenimiento toma la PDA en sus manos,
+                   y la inserta en una toma universal en su pecho.";
+            self.say( "Ya está, señor." );
+            print "^El robot te devuelve la PDA, y le echas una breve ojeada.^";
+            objPDA.cargar();
+            rtrue;
+        }
+        
+        if ( second ~= objLLAVE_DIGITAL_DE_MEMORIA ) {
+            return self.nadaQueHacer( second );
+        }
+    
+        if ( objLLAVE_DIGITAL_DE_MEMORIA notin jugador
+          || ~~objLLAVE_DIGITAL_DE_MEMORIA.probada )
+        {
+            player.think( "No sé muy bien qué decirles." );
+            rtrue;
+        }
+
+        if ( Planificador.ad_statusOk ) {
+            if ( objLLAVE_DIGITAL_DE_MEMORIA.getNivel() == 0 ) {
+                player.say( "Mi llave digital no funciona ... ¿podríais arreglármela?" );
+                print "Uno de los robots se acerca, y toma la llave de tu mano.^";
+                wait();
+                reparacionLlave( pnjROBOT_DE_MANTENIMIENTO );
+                player.say( "Caray, qué... bien." );
+                print "... los robots ya están con sus quehaceres.^";
+                wait();
+            }
+            else {
+                player.say( "Este... ¿seguro que tengo ya todo correcto?" );
+                self.say( "No podemos hacer nada más por usted, señor." );
+            }
+        }
+        else "Los robots parecen muy ensimismados, no te hacen caso.";
+    ],
+has  pluralname ;
+
+Character objPDA "PDA" limbo
+with
+       name 'PDA' 'pantalla' 'consola',
+       cargada false,
+       estaCargada [;
+            return self.cargada;
+       ],
+       cargar [;
+            self.cargada = true;
+            "La PDA se carga a tope.";       
+       ],
+       
+       before [;
+            insert:
+                if ( second == objSOPORTE_PARA_PDA ) {
+                    print "La PDA encaja con un pequeño sonido de acoplamiento.
+                           Después, emite un sonido agudo y un piloto
+                           se pone en verde.^"
+                    ;
+                    move self to objSOPORTE_PARA_PDA;
+                    
+                    if ( location == vespa___navegacion ) {
+                        wait( "^..." );
+                        print "^La vespa se coloca en posición de despegue";
+                        wait( "..." );
+                        print "^La PDA se ilumina en su soporte, siguiendo las coordenadas de la misión";
+                        wait( "..." );
+                        viewImageCenter( grfVESPA___NAVEGACION );
+                        print "^Sonríes satisfecho, mientras te reclinas en el sillón.^";
+                    
+                        deadflag = 2;
+                    }
+                    
+                    rtrue;
+                }       
+            Wave:
+                return self.cargar();
+            Take:
+                if ( self in objSOPORTE_PARA_PDA ) {
+                    <<remove self objSOPORTE_PARA_PDA>>;
+                }
+                move self to player;
+                Planificador.actualizarInventario();
+                "Cogida.";
+            Remove:
+                if ( self in objSOPORTE_PARA_PDA
+                && second == objSOPORTE_PARA_PDA ) 
+                {
+                    move self to player;
+                    
+                    print "Retiras la PDA del soporte,
+                            que emite un sonido grave y apaga el piloto.^"
+                    ;
+                    
+                    if ( pnjSupervisor.getStatus() >= 2 ) {
+                        objESCLUSA_DESCOMPRESION.ponAbierta();
+                    }
+                    
+                    rtrue;
+                }
+                else
+                if ( self in objTAQUILLA ) {
+                    <<take self>>;
+                }
+            Drop:
+                move self to location;
+                Planificador.actualizarInventario();
+                "Dejada.";
+            Tell:
+                if ( noun == self ) {
+                    <<Examine self>>;
+                }
+            Answer, Ask:
+                    return self.orders();
+            Push, Pull:
+                    "Pues no sé para qué querría hacer eso.";
+            Take, Kiss:
+                    "No tiene sentido.";
+            Touch:
+                    print "Será mejor indicar la opción a elegir.^";
+                    <<look>>;
+            Give, Show:
+                if ( second == Nothing
+                  || second == pnjROBOTS_DE_MANTENIMIENTO )
+                {
+                    if ( location == ZOMA_S2___MANTENIMIENTO ) {
+                        if ( planificador.ad_arreglado ) {
+                            <<tell pnjROBOTS_DE_MANTENIMIENTO self>>;
+                        }
+                    } else {
+                        "A nadie le interesa tu PDA. Todo el mundo tiene una igual.";
+                    }
+                }
+        ],
+        
+        explicaComo [;
+            self.say( "ERROR: Órden no entendida." );
+            print (s_underline) "Indica las opciones pulsando la tecla
+                                   con el número de opción.^"
+            ;
+            rtrue;
+        ],
+        
+        maxOpciones 3,
+        
+        description [ op;
+            viewImageCenter( grfPDA );
+            print "^Una PDA personal, que te permite manejar cómodamente tus
+                   datos personales y de trabajo. Una ranura permite la entrada
+                   de llaves de memoria.^En la pantalla puedes ver:^^"
+            ;
+        
+            s_fixed();
+            print "Seleccione una opción (ESC terminar):^^",
+                    "1. Mapa del Anillo Dorado.^",
+                    "2. Abreviaturas.^",
+                    "3. Conexión remota.^^"
+            ;
+
+            op = wait();
+            
+            if ( op == K_ESC ) {
+                jump END;
+            }
+
+            op = op - '0';
+
+            if ( op <= 0
+              || op > self.maxOpciones )
+            {
+                return self.explicaComo();
+            }
+            else {
+                if ( op == 1 ) {
+                        viewImageCenter( grfMAPA_AD );
+                        print "El AD (Anillo Dorado) se divide en cuatro sectores con dos ",
+                    "zonas de tránsito cada una, ocupando la parte más exterior del anillo.",
+                    " Desde el sector 1 se puede acceder al hangar del AD, con el ascensor ",
+                    "de la ZOED.^";
+                        ;
+                        wait();
+                        self.status = 0;
+                        s_normal();
+                        <<look>>;
+                }
+                else
+                if ( op == 2 ) {
+                    print "Listado de abreviaturas^^";
+                    print "AD ........... Anillo Dorado.^";
+                    print "ZOT .......... Zona de tránsito.^";
+                    print "ZOCA ......... Zona de capitanía.^";
+                    print "ZOED ......... Zona de educación.^";
+                    print "ZOBA ......... Zona de bahías o hangares.^";
+                    print "ZOES ......... Zona de esparcimiento.^";
+                    print "ZODE ......... Zona de tránsito.^";
+                    print "ZODO ......... Zona de documentación.^";
+                    print "ZOMA ......... Zona de mantenimiento.^";
+                    print "ZOAV ......... Zona de almacenamiento y vestuario.^";
+                    print "ZOIN ......... Zona de ingeniería.^";
+                
+                    self.status = 0;
+                    wait();
+                } else
+                if ( op == 3 ) {
+                    if ( Planificador.ad_statusOk ) {
+                        print "Conexión...^";
+                        print "Servidor: AnilloDorado__srv Protocolo: dynTP Port: 1990.^";
+                        print "Nivel de acceso: ", player.acceso, ", ";
+                        
+                        print (string) player.categoria(), ".^";
+                        
+                        print "^El anillo funciona a un rendimiento nominal.^";
+                        print "Todos los sistemas funcionando dentro de límites ordinarios.^";
+                    } else {
+                        print "El anillo funciona a un rendimiento nominal.^";
+                        print "90% de los sistemas funcionando dentro de límites ordinarios.^";
+                        print "Hangares cerrados.^";
+                        print "Maniobras de aproximación y despegue canceladas.^";
+                    }
+
+                    self.status = 0;
+                    wait();
+                }
+            }
+            
+            .END;
+            s_normal();
+            <<look>>;
+    ],
+has female;
+
+! [El robot de mantenimiento te echa del bar, por estar en una misión "en regla".]
+Character pnjROBOT_DE_MANTENIMIENTO "robot de mantenimiento"
+with
+    init [;
+        move self to ZOES_S3___BAR;
+        startDaemon( self );
+    ],
+    time_out [;
+        startDaemon( self );
+        if ( location == parent( self ) ) {
+            self.say( "Es usted un comando espacial con misión asignada activa." );
+            self.say( "Debe abandonar la zona inmediatamente." );
+            pasar_a_ConexionesAnillo();
+            playerTo( ZOT_S3___OCIO, 2 );
+        }
+
+        rtrue;
+    ],
+    time_left 2,
+    name 'robot' 'mantenimiento',
+    description "Los robots de mantenimiento son todos iguales... cuando hablas con ellos es porque te falta algo, y ellos lo encuentran seguro. Por otra parte, en ocasiones se dedican también a mantener el orden, y no dudan en usar la fuerza en caso de creerlo necesario.",
+    conversation [;
+        if ( planificador.ad_statusOk ) {
+            if ( objLLAVE_DIGITAL_DE_MEMORIA notin jugador
+              || ~~objLLAVE_DIGITAL_DE_MEMORIA.probada )
+            {
+                player.think( "No sé muy bien qué decirle." );
+                rtrue;
+            }
+            else
+            if ( objLLAVE_DIGITAL_DE_MEMORIA.getNivel() == 0 ) {
+                print "El robot se acerca y toma la llave de tu mano.^";
+                wait();
+                reparacionLlave( self );
+            }
+            else self.say( "Debe abandonar la ZOES, señor." );
+        }
+        else {
+            if ( ( turns % 2 ) == 0 ) {
+                self.say( "Debe abandonar la ZOES, señor." );
+                player.say( "Pero... pero... ¡estoy en una misión!... ¡necesito ayuda!" );
+                print "^El robot no parece demasiado interesado.";
+                self.say( "Acuda a manteminimiento, señor." );
+                player.say( "¡En mantenimiento no me hacen ni caso!" );
+                print "^El robot te empuja hacia la salida.";
+                self.say( "Abandone la zona, señor. No está autorizado." );
+            }
+            else {
+                player.say( "¡Maldita sea, estoy en una misión!" );
+                self.say( "Le sugiero que acuda entonces a ingeniería." );
+            }
+            
+            rtrue;
+        }
+    ],
+    daemon [;
+        if ( location == parent( self ) ) {
+            startTimer( self, 2 );
+            stopDaemon( self );
+        }
+    ],
+;
+
+Character pnjSUPERVISOR "supervisor"
+with
+	name 'SUPERVISOR' 'revisor' 'jefe',
+	description "Se encarga de que lleves todo lo necesario.",
+	before [;
+		Tell: return self.conversation();
+	],
+	say [ msg;
+		print (The) self, " dice: ";
+		print (s_underline) msg, "^";
+       	],
+	chk [ toret;
+		toret = true;
+        
+        if ( objTRAJE_ESPACIAL notin player
+          || objTRAJE_ESPACIAL hasnt worn )
+        {
+            self.say( "¡Venga, muchacho!... Incluso sin adiestramiento se sabe que es necesario llevar un traje espacial." );
+            toret = false;
+        } else {
+            self.say ( "Comprobación visual... correcta." );
+        }
+
+        if ( objPDA notin objSOPORTE_PARA_PDA ) {
+            self.say ( "Necesito verificar datos de la misión, por favor pon la PDA en el soporte." );
+            toret = false;
+        } else  {
+            self.say( "Verificando PDA en soporte... Correcto. Identidad verificada." );
+        }
+        
+		return toret;
+	],
+	conversation [;
+		if ( self.status == 0 ) {
+			if ( self.chk() ) {
+				self.say( "Me temo que tu PDA está baja de carga. Debes acudir a mantenimiento, no puedes iniciar la misión así. Lo siento. Sólo será un momento." );
+				planificador.ad_statusOk = false;
+				self.say( "¿Pero qué... ?" );
+				self.say( "Oye, algo está pasando, tengo que dejarte. Carga esa PDA." );	
+				self.status = 1;
+				print "La comunicación se corta.^";		
+			}
+		}
+		else
+		if ( self.status == 1 ) {
+			if ( self.chk() ) {
+                if ( ~~planificador.ad_arreglado ) {
+                    if ( ( turns % 2 ) == 0 )
+                        self.say( "Oye, comando, no puedo hacer nada por ti, y 
+                                   encima tenemos una emergencia grave."
+                        );
+                    else self.say( "Comando, lo siento, no podrías ir a ninguna
+                                    parte, las puertas exteriores de los
+                                    hangares se han cerrado misteriosamente.
+                                    Tenemos una avería gorda. Vuelve más tarde."
+                        );
+                    
+                    rtrue;
+                }
+                
+                if ( ~~objPDA.estaCargada() ) {
+                    self.say( "Comando, recuerda que tienes que recargar esa PDA." );
+                    rtrue;
+                }
+                
+                self.status++;
+                self.say( "Comando, tengo un error de lectura. Repetiremos el proceso." );
+                <<tell self>>;
+			}
+		}
+		else
+		if ( self.status == 2 ) {
+			if ( self.chk() ) {
+                self.say( "En cuanto cojas tu PDA se abrirán las puertas. Buena suerte en tu misión, comando." );
+                self.status = 3;
+			}
+		}
+		else
+		if ( self.status == 3 ) { 
+			self.say( "Comando, coge tu PDA y entra de una vez." );
+		}
+		rtrue;
+	],
+;
+

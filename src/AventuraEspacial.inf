@@ -1,0 +1,1936 @@
+!!% -SD
+!% +language_name=Spanish
+
+! generado por GLULXI6I18N@txtMap, v0.3/ v0.48 20090404
+! Wed Apr 08 21:42:30 2009
+
+
+
+Constant Story "Aventura Espacial^Introducción: en el Anillo Dorado.^";
+Constant Headline "^... o la Confederación Galáctica contra la Guerrilla Planetaria.^^[ Aquellos que juegan por primera vez a esta aventura deberían introducir AYUDA antes de empezar ]^^";
+Constant AMUSING_PROVIDED;
+Constant NO_SCORE;
+Constant K_ESC = -8;
+Release 1;
+
+[ amusing;
+    clearMainWindow();
+    print (s_bold) "Remake de la primera parte de la aventura ~Aventura Espacial~",
+          (s_underline) "^  creada por Aventuras AD en 1990.";
+    print (s_underline) "^  en el Anillo Dorado.^^^";
+    print "generado por Inferno en Abril de 2009.^";
+    print "completado con Inferno en Abril de 2009.^^^";
+    print "Esta aventura surgió de la posibilidad de buscar una obra con la que probar fácilmente Inferno. Con el tiempo, le cogí cariño a los gráficos (que no al argumento, objetos ni personajes), y me decidí a jugar el remake creado por NightWolf en 2007. De este remake obtuve fácilmente los gráficos para esta aventura, digitalizados en su tiempo, según parece, para Amiga. Una vez que me leí la solución a la aventura de AD, no pude por menos que reirme amargamente de la simpleza que suponía. Una vez fuera las siglas, simplificado el caprichosamente elevado número de objetos y estudiado el mapeado, el resultado era una aventura sin puzles que probablemente no hubiera despertado el interés de nadie.^";
+    print "Finalmente, terminó de picarme el gusanillo, y completé un poco esta aventura, de manera que fuera mínimamente jugable. No descarto hacer un remake del resto de partes de la Aventura Espacial, pero en cualquier caso, aquí está la introducción original que sólo se podía encontrar en ordenadores de 16 bits.^^";
+    print "Es obvio que esta obra es más un versionado que un ", (s_underline) "remake", (s_normal) ".^^";
+
+
+    print (s_underline) "baltasarq@@64caad.es^";
+];
+
+! Colors
+Constant SMW_SCBACK SMW_CLR_BLACK;
+Constant SMW_SCTEXT SMW_CLR_WHITE;
+Constant SMW_SCEMPH SMW_CLR_CYAN;
+Constant SMW_SCHEAD SMW_CLR_CYAN;
+Constant SMW_SCINPU SMW_CLR_GREEN;
+Constant SMW_SCPREF SMW_CLR_GREEN;
+Constant SMW_SCNOTE SMW_CLR_CYAN;
+
+! Hyperlinks
+Constant HL_SALIR   1;
+Constant HL_ENTRAR  2;
+Constant HL_NORTE   3;
+Constant HL_SUR     4;
+Constant HL_ESTE    5;
+Constant HL_OESTE   6;
+Constant HL_PROA    7;
+Constant HL_POPA    8;
+Constant HL_ESTR    9;
+Constant HL_BABOR   10;
+Constant HL_ARRIBA  11;
+Constant HL_ABAJO   12;
+Constant HL_GIRO    13;
+Constant HL_AGIRO   14;
+Constant HL_OBJ_BASE 60000;
+
+replace restartSub;
+replace manageHyperlinks;
+[ manageHyperlinks hl cmd obj;
+! Retorna el comando equivalente a cada hipervínculo
+    cmd = "";
+
+    switch( hl ) {
+        HL_SALIR:
+            cmd = "sal";
+            break;
+        HL_ENTRAR:
+            cmd = "entra";
+            break;
+        HL_NORTE:
+            cmd = "norte";
+            break;
+        HL_SUR:
+            cmd = "sur";
+            break;
+        HL_ESTE:
+            cmd = "este";
+            break;
+        HL_OESTE:
+            cmd = "oeste";
+            break;
+        HL_PROA:
+            cmd = "proa";
+            break;
+        HL_POPA:
+            cmd = "popa";
+            break;
+        HL_ESTR:
+            cmd = "estribor";
+            break;
+        HL_BABOR:
+            cmd = "babor";
+            break;
+        HL_ARRIBA:
+            cmd = "sube";
+            break;
+        HL_ABAJO:
+            cmd = "baja";
+            break;
+        HL_GIRO:
+            cmd = "giro";
+            break;
+        HL_AGIRO:
+            cmd = "antigiro";
+            break;
+        default:
+            if ( hl >= HL_OBJ_BASE ) {
+                obj = hl - HL_OBJ_BASE;
+                cmd = obj;
+            } else {
+                cmd = "mirar";
+            }
+
+            break;
+    }
+
+    return cmd;
+];
+
+Include ">AventuraEspacial.bli";
+Include "Parser";
+Include "infglk";
+Include "smw";
+Include "nautica";
+Include "Responde";
+
+Object LibraryMessages
+with
+    before [;
+        Miscellany:
+            if ( lm_n == 4 ) {
+                print "Ahora es realmente cuando comienza tu misión ***";
+                rtrue;
+            }
+    ]
+;
+
+Include "VerbLib";
+Include "SpanishG";
+Include "character";
+
+[ mueresAsfixiado;
+    deadflag = 1;
+
+    print "^...^^Es una sensación más que otra cosa.";
+    wait();
+    print "^^...^";
+    wait();
+    print "...^^";
+    wait();
+    print "Notas como te vas quedando sin aire ... cada vez
+           te cuesta más respirar. Te llevas las manos a la garganta, boqueando entre estertores.^";
+    print "Te parece que tus ojos se salen de sus órbitas, aunque sabes que sólo te estás congelando.",
+      " Poco a poco, tu piel toma un color purpúreo.^";
+    wait();
+    print "Parece que el corazón se vaya a salir de tu pecho, hasta que se para.^";
+    ;
+];
+
+object Limbo "Limbo";
+
+class Habitacion
+with
+    grf Nothing,
+    auxGrf Nothing,
+    description [;
+        Planificador.actualizarMapa();
+        viewImageCenter( self.grf );
+        rtrue;
+    ],
+    salidas [; print "Ninguna.^"; rtrue; ],
+    cant_go [; <<salidas>>; ]
+;
+
+class Espacio
+class Habitacion
+with
+    each_turn [;
+        if ( objTRAJE_ESPACIAL notin jugador
+          || objTRAJE_ESPACIAL hasnt worn )
+        {
+            mueresAsfixiado();
+        }
+    ],
+has light;
+
+class Room
+class Habitacion
+with
+    cant_go [;
+        print "Recuerda moverte hacia ",
+            (s_fixed) "babor, estribor, proa, popa, arriba y abajo",
+            (s_normal) ".^"
+        ;
+        self.Habitacion::cant_go();
+        print "^";
+        rtrue;
+    ]
+has light;
+
+class CAB
+class Room
+with
+    grf grfCAB,
+;
+
+class ZOT
+class Room
+with
+    grf grfZOT,
+    cant_go [; print "Recuerda moverte con ",
+            (s_fixed) "giro",
+            " y ", (s_fixed) "antigiro",
+            " aquí.^"
+        ;
+               self.Habitacion::cant_go();
+           print "^";
+           rtrue;
+    ]
+;
+
+object ControladorTransitoZOT_CAB
+with
+    found_in [;
+        if ( location ofclass ZOT or CAB
+          && location ~= ZOT_S1___DESCOMPRESION
+          && location ~= ZODE_S1___DESCOMPRESION )
+        {
+                rtrue;
+        } else  rfalse;
+    ],
+    react_after [;
+        Go, Exit:
+            if ( ( action == ##Go
+                && noun == in_obj or out_obj )
+                || action == ##Exit
+            )
+            {
+                if ( location ofclass ZOT )
+                        pasar_a_ConexionesAnillo();
+                else    pasar_a_ConexionesNauticas();
+
+                playSnd1( sndDOOR, 1, SMW_VOLUME_NORMAL );
+
+                print "Las puertas de la cabina se abren al advertir tu presencia, y se",
+                      " cierran tras de ti.^";
+            }
+    ],
+has concealed;
+
+CompassDirection giro_obj "giro" compass
+with
+    name 'giro' 'g//',
+    door_dir n_to
+;
+
+CompassDirection antigiro_obj "antigiro" compass
+with
+    name 'antigiro' 'a//',
+    door_dir s_to
+;
+
+[ pasar_a_ConexionesAnillo;
+    eliminarTodasLasConexiones();
+
+    move giro_obj to compass;
+    move antigiro_obj to compass;
+    moverConexionesNauticas( compass );
+];
+
+
+class Thing;
+
+class SceneryThing
+class Thing
+has scenery;
+
+[ hazPresentacion load;
+    initializeSMW( 400 );
+    viewImageCenter( grfPRESENTA );
+
+    print (s_bold) "La aventura espacial: en el Anillo Dorado (parte I)^";
+    print (s_underline) "(revisión de la aventura de mismo nombre publicada por Aventuras AD en 1990.)^";
+    wait();
+
+    print "¿Desea cargar una posición anterior? (Sí/No): ";
+    load = yesOrNo();
+    buildScreenLayout();
+
+    if ( load ) {
+        <<restore>>;
+    }
+    rtrue;
+];
+
+[ buildScreenLayout winMap winInv winExits;
+    initializeSMW( 250 );
+
+    winMap   = SMW.createGraphicsWindow( SMW.getMainWindow(), 25, SMW_POS_RIGHT );
+    winInv   = SMW.createTextWindow( winMap, 50, SMW_POS_DOWN );
+    winExits = SMW.createTextWindow( winInv, 50, SMW_POS_DOWN );
+];
+
+[ initialise;
+    ! Preparar al jugador
+    location = ZOED_S4___AULA;
+    move jugador to location;
+    changePlayer( jugador );
+
+    ! Preparar el parser
+    lookmode = 2;             ! siempre redescribir
+    pasar_a_ConexionesAnillo();
+
+    ! Objetos de inventario y otros movimientos
+    move objMONO_DE_FAENA to player;
+    give objMONO_DE_FAENA worn;
+    move objFOTO to player;
+    move objLLAVE_DIGITAL_DE_MEMORIA to player;
+    move objPDA to objTAQUILLA;
+    move pnjSUPERVISOR to objTransmisor;
+
+    ! Preparar personajes y contadores
+    startDaemon( Planificador );
+    player.prepareAllCharacters();
+    laberinto.init();
+
+    ! Empezar
+    hazPresentacion();
+    Planificador.actualizarVentanas();
+];
+
+! ================= Rooms ===============
+
+Responde frasesGritar
+private
+    elementos
+        "¡AAAARRRGGGGHHH!"
+        "¡¡Socorro!!"
+        "¡Por favor...!"
+        "¿Puede ayudarme alguien?"
+        "ÑÑÑÑÑÑGFS"
+        "¡AH!"
+        "¡Ayuda!"
+        "¡Ayuda!¡Ayuda!"
+        "¡Por favor, que alguien me ayude!"
+;
+
+Espacio EXTERIOR_DEL_ANILLO "Exterior del anillo"
+with
+    grfAux Nothing,
+    grf picExteriorAD,
+    description [;
+        self.Habitacion::description();
+        print "^Agarrado a un saliente, las compuertas exteriores están exactamente a tu espalda. El resto del inmenso anillo te rodea sobrecogedoramente. El sentimiento de agonía y el terrible miedo se acentúan por el hecho de que sólo puedes oirte a ti mismo respirar entrecortadamente. ^";
+        rtrue;
+    ],
+    salidas [;
+        self.Habitacion::salidas();
+        "Estás muy nervioso, buscas desesperadamente a dónde ir. Tu respiración parece acelerarse por segundos.";
+    ],
+    cant_go "Sólo puedes patalear, apenas sabes dónde está cada cosa.",
+    before [;
+        Examine:
+            if ( noun in jugador ) {
+                <<Inv>>;
+            }
+        Inv:
+            player.think( "Ahora no voy a apartar la mirada de esta argolla." );
+            rtrue;
+        gritar:
+            player.say( frasesGritar.dev_msg() );
+            rtrue;
+    ],
+;
+
+SceneryThing pared "pared" EXTERIOR_DEL_ANILLO
+with
+    pegadoPared false,
+    name_f 'pared',
+    name_fp 'compuertas' 'exteriores',
+    name_m 'casco',
+    description "La pared del anillo se antoja inmensa desde aquí fuera.
+                 Justo a tu espalda, se encuentran las compuertas
+                exteriores de los hangares, abiertas.",
+    before [;
+        push, attack:
+            if ( ~~self.pegadoPared ) {
+                "Te encuentras demasiado lejos de la pared como para empujarla.
+                 Estás agarrado, eso sí, de una argolla.";
+            }
+            print "Con un fuerte impulso, sales despedido hacia atrás, esperando aterrizar en el hangar";
+            wait( "..." );
+            print " el tiempo parece detenerse";
+            wait( "..." );
+            print " Los segundos, marcados dolorosamente por los
+                  latidos de tu corazón, que parece querer romper tus sienes,
+                  pasan inexorablemente, pero tú tienes la impresión de
+                  que nada ha sucedido. Flotas, sí, en el vacío, y el DAAD
+                  se aleja poco a poco de ti, pero...
+                  ¿lo conseguirás?^"
+            ;
+            wait( "^..." );
+            wait( "...^" );
+            playerTo( ZOHA_S1__HANGAR, 2 );
+            print "^";
+            player.think( "Esto ha estado MUY cerca..." );
+            wait();
+            print "^";
+            print "Apenas te has levantado del suelo, cuando varios pComandos te rodean y te obligan a acompañarles";
+            wait( "...^" );
+            playerTo( ZOT_S1___DESCOMPRESION, 2 );
+            print "^Caminas entre ellos, fuertemente escoltado... empiezas a preocuparte... ";
+            print "Seguís circulando por el pasillo exterior del anillo... ";
+            wait();
+            print "Hasta llegar a capitanía.^";
+            wait();
+            playerTo( ZOCA_S4___CAPITANIA, 2 );
+            pnjCAPITAN.setFinalConversation();
+            rtrue;
+    ],
+has female;
+
+SceneryThing argolla "argolla" EXTERIOR_DEL_ANILLO
+with
+    name_f 'argolla' 'anilla' 'enganche',
+    name_m 'saliente' 'gancho' 'aro',
+    description "Una argolla. Es probable que fuera utilizada anteriormente
+                para realizar tareas de mantenimiento.",
+    before [;
+        pull:
+            if ( ~~pared.pegadoPared ) {
+                pared.pegadoPared = true;
+                "Al tirar de la argolla, pegas tu cuerpo a la pared del anillo. Ahora estás más tranquilo.";
+            } else {
+                player.think( "Menos mal..." );
+                "Resoplas. Ya estás pegado a la pared, lo que te hace estar más tranquilo.";
+            }
+            rtrue;
+        push:
+            if ( pared.pegadoPared ) {
+                pared.pegadoPared = false;
+                print "^Tu respiración se acelera.^";
+                player.think( "Así no mejoro las cosas..." );
+                print "Te separas de la pared.^";
+            } else {
+                player.think( "Así me estoy separando de la pared. Mejor no." );
+                print "Empiezas a sudar profusamente.^";
+            }
+            rtrue;
+    ]
+has female;
+
+Room VESPA___NAVEGACION "VESPA - Navegación"
+with
+    grf picZOBA,
+    description [;
+        self.Habitacion::description();
+        print "^Los controles indican que la vespa está preparada para comenzar la exploración. Una base para PDA's se sitúa entre ellos.^";
+        rtrue;
+    ],
+;
+
+SceneryThing controlesNavegacion "controles de navegación" VESPA___NAVEGACION
+with
+    name 'controles' 'indicadores',
+    description "Los controles de la nave.",
+    before [;
+        push, pull:
+            player.think( "Soy un despistado." );
+            player.think( "Lo cierto es que el despegue desde el AD es automático." );
+            rtrue;
+    ],
+has pluralname;
+
+
+CAB ZOAV_S2___TAQUILLAS "ZOAV S2 - Taquillas"
+with
+    auxGrf grfMapaS2N0,
+    grf grfZOAV_S2___TAQUILLAS,
+    cerradura objTAQUILLA,
+    conLlave objTAQUILLA,
+    nivel 1,
+    description [;
+        self.Habitacion::description();
+        print "^Las taquillas del personal de combate (los comandos espaciales) se alinean contra las cuatro paredes.^";
+        rtrue;
+    ],
+    out_to ZOT_S2___PERSONAL,
+
+;
+Espacio ZOHA_S1__HANGAR "ZOHA S1 - Hangar"
+with
+    nivel 1,
+    cerradura objVespa,
+    conLlave vespa___navegacion,
+    grf picZOBA,
+    auxGrf grfMapaZOBAN0,
+    description [;
+        self.Habitacion::description();
+        print "^De fondo, el telón tachonado de estrellas es recortado por las diferentes naves estacionadas, algunas, como destructores de combate, de gran tamaño, y otras, como los pequeños vehículos espaciales, parecen empequeñecerse a su lado.^";
+        rtrue;
+    ],
+    salidas [;
+        print "Una VESPA tiene preparada la escalerilla.^";
+        rtrue;
+    ],
+    u_to [;
+        <<enter objVESPA>>;
+    ],
+    in_to [;
+        <<enter objVESPA>>;
+    ],
+
+;
+
+! Aquí se produce una conversación entre el capitán y el protagonista,
+! en la que se le encarga acabar con uno de los detectores de amenazas,
+! absolutamente fuera de control.
+CAB ZOCA_S4___CAPITANIA "ZOCA S4 - Capitanía"
+with
+    auxGrf grfMapaS4N0,
+    grf grfZOCA_S4___CAPITANIA,
+    description [;
+        self.Habitacion::description();
+        print "^Aunque ahora te encuentras en uno de los diversos anexos para reuniones más informales, la sala de capitanía es una gran cabina de reuniones donde se deciden cuestiones importantes de la Confederación Galáctica, así como se planean diferentes misiones.^^";
+        rtrue;
+    ],
+    out_to ZOT_S4___CAPITANIA,
+
+;
+
+Espacio ZODE_S1___CAMARA_ESTANCA "ZODE S1 - Cámara estanca"
+with
+    grf grfCADES,
+    description [;
+        self.Habitacion::description();
+        print "^La cámara estanca es un pequeño lugar de transición con dos puertas. Has entrado por una que ahora está cerrada, y también está la que se encuentra delante de ti.^";
+        rtrue;
+    ],
+    out_to  ZOHA_S1__HANGAR,
+    in_to   ZODE_S1___DESCOMPRESION,
+    before [;
+        salidas:
+            print "Puedes ";
+            setBeginHyperlink( HL_SALIR );
+            print (s_fixed) "salir";
+            setEndHyperlink();
+            print " a los hangares, o ";
+            setBeginHyperlink( HL_ENTRAR );
+            print (s_fixed) "entrar";
+            setEndHyperlink();
+            print " al anillo, en la zona de descompresión.^";
+            rtrue;
+    ],
+;
+
+! [Es un paso a un lugar sin gravedad.]
+Room ZODE_S1___DESCOMPRESION "ZODE S1 - Descompresión"
+with
+    grf grfCADES,
+    auxGrf grfMapaS1N0,
+    nivel 1,
+    cerradura objVAINA,
+    conLlave objVAINA,
+    description [;
+        self.Habitacion::description();
+        print "^Varias vainas, conteniendo trajes para superar los rigores espaciales, se amontonan en dos de las paredes de esta sala. Así, se puede entrar también desde aquí a la cámara estanca, aunque un indicador de color rojo situado en la parte superior de la puerta parece querer disuadirnos de ello. Un transmisor y una base para PDA se sitúan cerca de la compuerta de la cámara.^^";
+        rtrue;
+    ],
+    Salidas [;
+        print "Puedes ";
+        setBeginHyperlink( HL_ARRIBA );
+        print (s_fixed) "subir";
+        setEndHyperlink();
+        print " (a la cámara de descompresión), o ";
+        setBeginHyperlink( HL_ABAJO );
+        print (s_fixed) "bajar";
+        setEndHyperlink();
+        print " (por el ascensor).^";
+        rtrue;
+    ],
+    d_to ZOT_S1___DESCOMPRESION,
+    in_to [;
+        <<go u_obj>>;
+    ],
+    u_to [;
+        if ( objESCLUSA_DESCOMPRESION.abierta )
+                playerTo( ZODE_S1___CAMARA_ESTANCA, 2 );
+        else    print "Las compuertas de la cámara estanca están cerradas.^";
+
+        rtrue;
+    ],
+;
+Room ZODE_S3___ESCLUSA_ESTANCA "ZODE S3 - Esclusa estanca"
+with
+    dir introLaberinto,
+    auxGrf grfMapaS3N0,
+    grf grfCADES,
+    description [;
+        self.Habitacion::description();
+        print "^La pequeña esclusa tiene apenas tamaño para albergar a una sola persona. Las salidas por encima y por debajo permiten pasar a la zona de control semiautomático del Anillo Dorado. Hay un gancho fijado a la pared. Un botón rojo bloquea la zona y abre la escotilla de paso.^";
+        rtrue;
+    ],
+	u_to [; self.dir = ZOIN_S3___INGENIERIA; <<push botonDesc>>; ],
+	d_to [; self.dir = introLaberinto; <<push botonDesc>>; ],
+    before [;
+        salidas:
+            print "Puedes ";
+            setBeginHyperlink( HL_ARRIBA );
+            print (s_fixed) "subir";
+            setEndHyperlink();
+            print " a ingeniería, o ";
+            setBeginHyperlink( HL_ABAJO );
+            print (s_fixed) "bajar";
+            setEndHyperlink();
+            print " hacia la entrada a las conducciones inferiores.^"
+            ;
+            rtrue;
+    ],
+;
+
+SceneryThing botonDesc "botón de descompresión" ZODE_S3___ESCLUSA_ESTANCA
+with
+    activado false,
+    found_in [;
+        if ( location == ZODE_S1___CAMARA_ESTANCA
+          || location == ZODE_S3___ESCLUSA_ESTANCA )
+        {
+            rtrue;
+        }
+        else rfalse;
+    ],
+	name 'boton' 'rojo' 'descompresion',
+	description "Pues eso, un botón rojo y grande, rodeado de advertencias.",
+	before [;
+		push:
+            if ( ~~self.activado ) {
+                print "La cámara de descompresión no se abre, bloqueando el paso.^";
+                print "Vuelves a subir...^";
+                playerTo( ZOIN_S3___INGENIERIA, 2 );
+                rtrue;
+            }
+
+            if ( objARNES.estaAtado()
+              && ZODE_S3___ESCLUSA_ESTANCA.dir == ZOIN_S3___INGENIERIA )
+            {
+                print "Primero desatas la cuerda del gancho.^";
+            }
+
+			print "Pulsas el botón rojo...^";
+			print "La compuerta anterior se cierra, y, tras un breve silbido, la posterior se abre, deslizándote suavemente...^";
+
+            if ( pnjRATAS in ZODE_S3___ESCLUSA_ESTANCA ) {
+                print "El vacío hace que las ratas salgan despedidas, y exploten asquerosamente en medio de la estancia.^";
+                move objRATAS_MUERTAS to ZODE_S3___ESCLUSA_ESTANCA.dir;
+                move pnjRATAS to limbo;
+            }
+
+			playerTo( ZODE_S3___ESCLUSA_ESTANCA.dir, 2 );
+			rtrue;
+	],
+;
+
+CAB ZODO_S1___DOCUMENTACION "ZODO S1 - Documentación"
+with
+    grf grfZODO_S1___DOCUMENTACION,
+    auxGrf grfMapaS1N0,
+    description [;
+        self.Habitacion::description();
+        print "^En la suave penumbra que reina en esta zona de documentación, destacan varios nichos para especímenes bien iluminados. Albergan todo el conocimiento sobre las muchas otras razas de la confederación galáctica.^";
+        rtrue;
+    ],
+    out_to ZOT_S1___DOCUMENTAL,
+
+;
+
+! [La confederación galáctica contra el cerebro loco. Primera parte: en el anillo dorado. Has terminado tu instrucción. Eres un comando espacial en misión exploratoria.]
+CAB ZOED_S4___AULA "ZOED S4 - Aula"
+with
+    auxGrf grfMapaS4N0,
+    grf grfZOED_S4___AULA,
+    description [;
+        self.Habitacion::description();
+        print "^En el aula de instrucción toda la atención está centrada alrededor del sabio gran maestro galáctico, quien, frente al monitor del espacio profundo, instruye a los comandos que no tienen asignada ninguna misión.^^";
+
+        if ( self hasnt visited ) {
+            player.think( "Por fin. Me he graduado. Ya soy un Comando Espacial." );
+            print "^";
+        }
+
+        rtrue;
+    ],
+    out_to ZOT_S4___INSTRUCCION,
+;
+
+CAB ZOES_S3___BAR "ZOES S3 - Bar"
+with
+    grf grfZOES_S3___BAR,
+    auxGrf grfMapaS3N0,
+    description [;
+        self.Habitacion::description();
+        print "^Las partículas de los cilindros de euforia producen una densa atmósfera y hacen que la Zona de Esparcimiento esté casi en semipenumbra. Algunos comandos retornados, de otra unidad, celebran su vuelta mientras el ocupado robot de mantenimiento trata de mantener el orden. Los pComandos están, como siempre, por su lado.^^";
+        rtrue;
+    ],
+    out_to ZOT_S3___OCIO,
+
+;
+CAB ZOIN_S3___INGENIERIA "ZOIN S3 - Ingeniería"
+with
+    auxGrf grfMapaS3N0,
+    description [;
+        self.Habitacion::description();
+        print "^Desde luego, puedes apostar que nunca habías estado en este lugar. Se te antoja como si estuvieras viendo en directo las entrañas del anillo. Lo cierto es que reconoces la típica estructura de una de tantas cabinas de la nave, pero sucia y desaliñada también. El hueco de una bajada a una esclusa estanca se percibe en el suelo.^";
+        rtrue;
+    ],
+    before [;
+        salidas:
+            print "Puedes ";
+            setBeginHyperlink( HL_SALIR );
+            print (s_fixed) "salir";
+            setEndHyperlink();
+            print " al pasillo o ";
+            setBeginHyperlink( HL_ABAJO );
+            print (s_fixed) "bajar";
+            setEndHyperlink();
+            print " a la esclusa estanca.^";
+
+            rtrue;
+    ],
+    d_to [;
+        ZODE_S3___ESCLUSA_ESTANCA.dir = introLaberinto;
+        playerTo( ZODE_S3___ESCLUSA_ESTANCA, 2 );
+        rtrue;
+    ],
+    out_to ZOT_S3___MIRADOR,
+;
+
+SceneryThing esclusa "Esclusa estanca" ZOIN_S3___INGENIERIA
+with
+    name_f 'esclusa' 'estanca',
+    name_m 'compuerta',
+    before [;
+        Enter, Bajar:
+            <<go d_obj>>;
+    ],
+has female;
+
+CAB ZOMA_S2___MANTENIMIENTO "ZOMA S2 - Mantenimiento"
+with
+    auxGrf grfMapaS2N0,
+    description [;
+        self.Habitacion::description();
+        print "^Mantenimiento es una gran sala donde los robots de mantenimiento trastean arreglando cosas. Se mueven de un lado a otro entre multitud de paneles.^^";
+        rtrue;
+    ],
+    out_to ZOT_S2___MANTENIMIENTO,
+;
+
+SceneryThing objPANELES "paneles de instrumentos" ZOMA_S2___MANTENIMIENTO
+with
+    name 'paneles' 'instrumentos',
+    description
+        "Los paneles tienen varias luces que parpadean entre rojo y verde, y ranuras de conexiones en donde los robots de mantenimiento se conectan, presumiblemente para arreglar cosas.",
+    before [;
+        push, pull: "No serías capaz de hacer que nada funcionase aquí.";
+    ],
+has pluralname;
+
+Room ZOMA_S3___CONTROLES "ZOMA S3 - Controles"
+with
+    auxGrf grfMapaS3N1,
+    grf grfCAB,
+    description [;
+        self.Habitacion::description();
+        print "^El hueco es reducido, pero aún así suficientemente grande para que quepan cuatro personas al mismo tiempo.
+		La pared del anillo que debería separar esta estancia del espacio exterior no existe, y, de hecho,
+		puedes ver sin dificultad las compuertas de las bahías del Anillo Dorado.^Los controles, largo tiempo ya abandonados,
+		se esparcen por las paredes del habitáculo.^";
+        rtrue;
+    ],
+    salidas [;
+        print "Puedes ";
+        setBeginHyperlink( HL_ARRIBA );
+        print (s_fixed) "subir";
+        setEndHyperlink();
+        print " a los conductos de ventilación, o ";
+        setBeginHyperlink( HL_SALIR );
+        print (s_fixed) "salir";
+        setEndHyperlink();
+        print " al exterior del anillo.^";
+
+        rtrue;
+    ],
+    u_to [;
+        pasajeLaberinto.x = pasajeLaberinto.DestX;
+        pasajeLaberinto.y = pasajeLaberinto.DestY;
+        playerTo( pasajeLaberinto, 2 );
+        rtrue;
+    ],
+    out_to [; jugador.think( "Con estas cosas no se bromea..." ); rtrue; ],
+
+;
+
+ZOT ZOT_S1___DESCOMPRESION "ZOT S1 - Descompresión"
+with
+    auxGrf grfMapaS1N0,
+    cerradura pnjBLOQUEADOR,
+    conLlave ZODE_S1___DESCOMPRESION,
+    nivel 1,
+    description [;
+        self.Habitacion::description();
+        print "^El ascensor permite acceder a los niveles de descompresión y muelles de naves del anillo dorado. Un robot guardián bloqueador vigila el acceso al mismo.^^";
+        rtrue;
+    ],
+    n_to ZOT_S1___DOCUMENTAL,
+    s_to ZOT_S4___CAPITANIA,
+    u_to [; <<insert objLLAVE_DIGITAL_DE_MEMORIA pnjBLOQUEADOR>>; ],
+
+;
+ZOT ZOT_S1___DOCUMENTAL "ZOT S1 - Documental"
+with
+    auxGrf grfMapaS1N0,
+    description [;
+        self.Habitacion::description();
+        print "^Una amplia entrada conduce a una sala de documentación desde la zona de documentación. Un cartel se sitúa encima del mismo. Hay un holograma en la entrada.^";
+        rtrue;
+    ],
+    n_to ZOT_S2___MANTENIMIENTO,
+    s_to ZOT_S1___DESCOMPRESION,
+    in_to ZODO_S1___DOCUMENTACION,
+
+;
+ZOT ZOT_S2___MANTENIMIENTO "ZOT S2 - Mantenimiento"
+with
+    auxGrf grfMapaS2N0,
+    description [;
+        self.Habitacion::description();
+        print "^Mantenimiento puede ser accedido desde este pasillo. Por aquí suele haber mucho movimiento, personal que necesita hacer comprobaciones de sus llaves digitales o cualquier otro problema con el material o facilidades del anillo dorado.^";
+        rtrue;
+    ],
+    n_to ZOT_S2___PERSONAL,
+    s_to ZOT_S1___DOCUMENTAL,
+    in_to ZOMA_S2___MANTENIMIENTO,
+
+;
+ZOT ZOT_S2___PERSONAL "ZOT S2 - Personal"
+with
+    auxGrf grfMapaS2N0,
+    cerradura objRANURA,
+    conLlave ZOAV_S2___TAQUILLAS,
+    nivel 1,
+    description [;
+        self.Habitacion::description();
+        print "^Una puerta con cerradura óptica conduce a las estancias de personal.^";
+        rtrue;
+    ],
+    n_to ZOT_S3___OCIO,
+    s_to ZOT_S2___MANTENIMIENTO,
+    in_to [; <<insert objLLAVE_DIGITAL_DE_MEMORIA objRANURA>>; ],
+;
+ZOT ZOT_S3___MIRADOR "ZOT S3 - Mirador"
+with
+    auxGrf grfMapaS3N0,
+    description [;
+        self.Habitacion::description();
+        print "^El suelo, transparente en esta parte del anillo, se convierte en un amplio mirador espacial. En una pared aparece grabada la inscripción ~A.D.~. Una pequeña puerta deslizante se encuentra en un lateral.^";
+        rtrue;
+    ],
+    n_to ZOT_S4___INSTRUCCION,
+    s_to ZOT_S3___OCIO,
+    in_to ZOIN_S3___INGENIERIA,
+
+;
+ZOT ZOT_S3___OCIO "ZOT S3 - Ocio"
+with
+    auxGrf grfMapaS3N0,
+    description [;
+        self.Habitacion::description();
+        print "^De la zona de esparcimiento llegan fuertes risas de comandos de descanso. Sabes que aquellos comandos que han fracasado en su misión suelen salir por aquí con muy, muy mal aspecto.^";
+        rtrue;
+    ],
+    n_to ZOT_S3___MIRADOR,
+    s_to ZOT_S2___PERSONAL,
+    in_to ZOES_S3___BAR,
+
+;
+ZOT ZOT_S4___CAPITANIA "ZOT S4 - Capitanía"
+with
+    auxGrf grfMapaS4N0,
+    description [;
+        self.Habitacion::description();
+        print "^Pasas frente a las dependencias exclusivas de capitanía galáctica. Desde luego, con tu rango actual, sólo puedes acudir ahí dentro por invitación específica.^";
+        if ( self hasnt visited ) {
+            print "Siguiendo el ",
+                (s_fixed) "giro",
+                " del anillo, así como en sentido inverso (",
+                (s_fixed) "antigiro",
+                "), se extienden los brazos del anillo dorado.^";
+            ;
+            print "Como en casi todas las zonas de tránsito, se puede acceder a una cabina interior.^";
+        } else {
+            print "Los brazos del anillo continúan en ambos sentidos.^";
+        }
+
+        rtrue;
+    ],
+    n_to ZOT_S1___DESCOMPRESION,
+    s_to ZOT_S4___INSTRUCCION,
+
+;
+ZOT ZOT_S4___INSTRUCCION "ZOT S4 - Instrucción"
+with
+    auxGrf grfMapaS4N0,
+    description [;
+        self.Habitacion::description();
+        print "^Una entrada permite acceder al aula de instrucción, desde esta zona de tránsito. Siguiendo el ",
+            (s_fixed) "giro",
+            " del anillo, así como en sentido inverso (",
+            (s_fixed) "antigiro",
+            "), se extienden los brazos del anillo dorado.^",
+            "Como en casi todas las zonas de tránsito, se puede acceder a una cabina interior.^";
+        rtrue;
+    ],
+    n_to ZOT_S4___CAPITANIA,
+    s_to ZOT_S3___MIRADOR,
+    in_to ZOED_S4___AULA,
+
+;
+
+! ================= Things ===============
+Include ">personajesAventuraEspacial.inf";
+Include ">laberinto.inf";
+
+SceneryThing objInteriorCabina_false "cabina"
+with
+    name_f 'cabina',
+    name_m 'lugar' 'sitio',
+    description [; <<look>>; ],
+    found_in [;
+        if ( location ofclass CAB )
+                rtrue;
+        else    rfalse;
+    ],
+has female;
+
+SceneryThing objCABINA_false "cabina"
+with
+    name 'cabina',
+    before [;
+        Enter:
+            <<GoIn>>;
+    ],
+    react_before [;
+        Go:
+            if ( noun == in_obj
+              && location == ZOT_S4___CAPITANIA )
+            {
+                "Sólo puedes entrar en capitanía por invitación expresa.";
+            }
+    ],
+    description [cab;
+        print "Todas las entradas a las cabinas del anillo son iguales, no hay forma de diferenciarlas. Sólo tu experiencia a bordo te permite hacerlo.^";
+        print "El anillo dorado se divide en cuatro sectores, cada uno de ellos tiene dos zonas de tránsito como en la que estás ahora, permitiendo el paso a una cabina.^";
+        cab = location.in_to;
+
+        if ( cab ~= Nothing ) {
+            print "Esta cabina es la ";
+            s_underline();
+            print (name) cab;
+            s_normal();
+            print ".^";
+        } else {
+            if ( location == ZOT_S1___DESCOMPRESION ) {
+                print "Esta zona de tránsito permite acceder a descompresión, en los niveles superiores de la nave, así que hay un ascensor en lugar de una cabina.^";
+            }
+            else
+            if ( location == ZOT_S4___CAPITANIA ) {
+                print "Sólo los oficiales tienen acceso a capitanía.^";
+            }
+            else print "No tienes acceso a esta cabina.^";
+        }
+
+        rtrue;
+    ],
+    found_in [;
+        if ( location ofclass ZOT )
+            rtrue;
+        else    rfalse;
+    ],
+has female;
+
+SceneryThing puertas "puertas"
+with
+    found_in [;
+        if ( location ofclass CAB or ZOT
+          && location ~= ZOT_S1___DESCOMPRESION
+          && location ~= ZODE_S1___DESCOMPRESION )
+        {
+            rtrue;
+        } else    rfalse;
+    ],
+    name_f 'puerta' 'compuerta',
+    name_fp 'puertas' 'compuertas',
+    before [;
+        Open, Close:
+            "No es necesario. O bien son automáticas, o bien debe introducirse la llave personal para permitir el paso (si se está autorizado).";
+    ],
+    description [room;
+        if ( location ofclass CAB ) {
+            room = location.out_to;
+            print (The) self, " permiten el acceso a ";
+            if ( room ~= Nothing ) {
+                s_underline();
+                print (name) room;
+                s_normal();
+            }
+            else print "la zona de tránsito";
+
+            print ", con ", (s_fixed) "salir", ".^";
+        } else {
+            room = location.in_to;
+            print (The) self, " permiten el acceso a ";
+            if ( room ~= Nothing ) {
+                s_underline();
+                print (name) room;
+                s_normal();
+            }
+            else print "la cabina";
+
+            print ", con ", (s_fixed) "entrar", ".^";
+        }
+
+        rtrue;
+    ],
+has female pluralname;
+
+Thing objARNES "arnés" limbo
+private
+    atado false,
+with
+    estaAtado [;
+        return ( ( self in player ) && self.atado && ( self has worn ) );
+    ],
+    desataArnes [;
+        self.atado = false;
+    ],
+    name 'ARNES' 'seguridad',
+    name_f 'brujula' 'cuerda',
+    description [;
+        print "El arnés te lo puedes ceñir al traje y permite asegurarte
+               mediante una larga cuerda. Lleva incorporada una brújula.^";
+
+        if ( self.estaAtado() ) {
+            print "Te has puesto el arnes, y estás firmemente sujeto por la cuerda.^";
+        }
+
+        print "Te sitúas de manera que la brújula apunte hacia el norte,
+               por delante de ti, y te fijas en las salidas.^";
+
+        <<salidas>>;
+    ],
+    before [;
+        Disrobe:
+            if ( self.estaAtado() ) {
+                player.think( "No puedo quitarme el arnes estando la cuerda atada..." );
+                rtrue;
+            }
+        Desatar:
+            if ( ~~self.estaAtado() ) {
+                player.think( "Mmm... la cuerda no está atada a nada." );
+                rtrue;
+            }
+
+            if ( location ~= ZODE_S3___ESCLUSA_ESTANCA ) {
+                player.think( "Mmm... no creo que pueda desatar la cuerda desde aquí." );
+                rtrue;
+            }
+
+            if ( second ~= Nothing
+              && second ~= objGANCHO )
+            {
+                player.think( "La cuerda está atada al gancho." );
+                rtrue;
+            }
+
+            self.desataArnes();
+            "Desatas la cuerda.";
+        Tie:
+            if ( self.estaAtado() ) {
+                player.think( "Mmm... ya estaba atado. Parece que últimamente pierdo la memoria." );
+                rtrue;
+            }
+
+            if ( location == EXTERIOR_DEL_ANILLO ) {
+                player.Think( "No pienso separar las manos de este saliente." );
+                rtrue;
+            }
+
+            if ( location ~= ZODE_S3___ESCLUSA_ESTANCA ) {
+                player.Think( "Aquí no hay donde atar nada." );
+                rtrue;
+            }
+
+            if ( second == Nothing ) {
+                player.think( "Debo decidir a dónde atar la cuerda." );
+                rtrue;
+            }
+
+            if ( self hasnt worn ) {
+                player.think( "De poco me servirá atarlo si no me lo pongo primero." );
+                rtrue;
+            }
+
+            if ( second == objGANCHO ) {
+                self.atado = true;
+                print "Haces el mejor nudo que sabes.^";
+                player.think( "Así debería servir." );
+            } else {
+                player.think( "No creo que vaya a conseguir nada atándo la cuerda ahí." );
+            }
+
+            rtrue;
+    ]
+has  clothing;
+
+SceneryThing objASCENSOR "ascensor" ZOT_S1___DESCOMPRESION
+with
+    name 'ASCENSOR',
+    description "El ascensor es un tubo transparente, que de alguna forma, al introducirte en él te lleva hasta el otro extremo, sin necesidad de puertas ni nada.",
+    before [;
+        Bajar:
+            if ( location == ZODE_S1___DESCOMPRESION )
+                    <<go d_obj>>;
+            else    "El ascensor permite ", (s_fixed) "subir", " a niveles superiores.^";
+        Enter:
+            if ( location == ZOT_S1___DESCOMPRESION )
+                    <<go u_obj>>;
+            else    <<go d_obj>>;
+    ],
+    react_after [;
+        go:
+            if ( noun == d_obj
+              || noun == u_obj )
+            {
+                print "Tras moverse con un pequeño suspiro por toda señal, las puertas se abren.^";
+                rfalse;
+            }
+    ],
+    react_before [;
+        GoIn:
+            if ( location == ZOT_S1___DESCOMPRESION )
+                    <<Enter self>>;
+            else    <<salidas>>;
+
+    ],
+    found_in [;
+        if ( location == ZOT_S1___DESCOMPRESION
+          || location == ZODE_S1___DESCOMPRESION )
+        {
+                rtrue;
+        } else  rfalse;
+    ],
+has   ;
+
+SceneryThing objBOTON "botón" ZODE_S1___CAMARA_ESTANCA
+with
+    name 'BOTON',
+    description [;
+        print "Un pequeño panel en su parte inferior informa: ",
+            (s_underline) "Compresión/descompresión"
+        ;
+        rtrue;
+    ],
+has   ;
+
+SceneryThing objCARTEL "cartel" ZOT_S1___DOCUMENTAL
+with
+    name 'CARTEL',
+    description [;
+        print "Indica: ",
+            (s_underline) "Acceso libre a la sala de documentación.",
+            "^Un poco más abajo, reza: ",
+            (s_underline) "Recuerda: todos los seres que han existido son descendientes ",
+            "de una forma primordial a la que se dió vida alguna vez."
+        ;
+        rtrue;
+    ],
+has   ;
+
+SceneryThing objCARTEL_ROJO "cartel rojo" ZOT_S1___DESCOMPRESION
+with
+    name 'CARTEL' 'rojo',
+    description [;
+        print "Un cartel rojo con letras blancas indica: ",
+            (s_underline) "Acceso a Zona de bahías. - Sólo personal autorizado."
+        ;
+        rtrue;
+    ],
+has   ;
+
+SceneryThing objCONTROLES_AUTOMATICOS "controles automáticos" ZOMA_S3___CONTROLES
+with
+    name 'CONTROLES' 'automaticos',
+    description "Varios botones y palancas, con diferentes etiquetas, que controlan el estado de varios aspectos del anillo. Una de las palancas te llama la atención por su etiquetado."
+has  pluralname ;
+
+SceneryThing objCONTROLES_MANUALES "controles manuales" ZOMA_S3___CONTROLES
+with
+    name 'CONTROLES' 'manuales',
+    description "Los controles manuales, en la pared contraria están formados exclusivamente por palancas. En la parte superior, se avisa de la eventualidad de que las palancas no se rigen por el sistema automático de control del anillo. Una de las palancas tiene una descripción interesante."
+has  pluralname ;
+
+SceneryThing objESCLUSA_DESCOMPRESION "esclusa estanca" ZODE_S1___DESCOMPRESION
+with
+    abierta false,
+    ponAbierta [;
+        self.abierta = true;
+        "Las compuertas se abren...";
+    ],
+    name_f 'esclusa' 'estanca' 'compuerta' 'puerta' 'camara' 'descompresion',
+    name_fp 'compuertas' 'puertas',
+    description [;
+        print "Las poderosas compuertas de la cámara de desompresión principal con la zona de hangares. ";
+
+        if ( self.abierta )
+                print "La esclusa está abierta.^";
+        else    print "La cámara está cerrada.^";
+    ],
+    before [;
+        Enter:
+            <<goIn>>;
+    ],
+has female  ;
+
+SceneryThing objESTANTERIAS "estanterías" ZODE_S1___DESCOMPRESION
+with
+    name 'ESTANTERIAS',
+    description "Alargadas, ocupan todas las paredes, a excepción de la zona estanca."
+has female pluralname ;
+
+SceneryThing objETIQUETA "etiqueta" ZOAV_S2___TAQUILLAS
+with
+    name 'ETIQUETA',
+    description [;
+        print "Pues eso, ", (s_underline) player.short_name, ".^";
+        rtrue;
+    ],
+has female  ;
+
+Thing objFOTO "foto" ZOED_S4___AULA
+with
+    name_f 'FOTO',
+    name_m 'retrato',
+    description [;
+        viewImageCenter( picNOVIA );
+        print "La foto de tu novia, que siempre llevas contigo.^";
+        wait();
+        <<look>>;
+    ],
+has   female;
+
+SceneryThing objGANCHO "gancho" ZODE_S3___ESCLUSA_ESTANCA
+with
+    name 'GANCHO',
+    name_f 'argolla',
+    description [;
+        print "La argolla permite asegurarse con un arnés.^";
+
+        if ( objARNES.estaAtado() ) {
+            print "La cuerda está atada a la argolla.^";
+        }
+
+        rtrue;
+    ],
+has   ;
+
+SceneryThing objHOLOGRAMA "holograma" ZOT_S1___DOCUMENTAL
+with
+    name 'HOLOGRAMA',
+    description "Se trata de una holograma tridimensional que representa la galaxia. Cuando te fijas en alguna parte del mismo, se realiza un zoom que te permite visualizar nuevos detalles. Es fascinante."
+has female  ;
+
+SceneryThing objINDICADOR "indicador" ZODE_S1___DESCOMPRESION
+with
+    name 'INDICADOR',
+    description [;
+        print "Indica: ",
+            (s_underline) "PRECAUCIÓN: Sólo personal autorizado. ",
+            (s_bold) "Revise su equipo antes de entrar."
+        ;
+        rtrue;
+    ],
+has   ;
+
+SceneryThing objINDICADOR_VISUAL "indicador visual" ZOT_S4___INSTRUCCION
+with
+    name 'INDICADOR',
+    description [;
+        print "Reza: ",
+            (s_underline) "Acceso libre al aula de instrucción.",
+            "Un poco más abajo, alguien grabó toscamente la leyenda: ",
+            (s_underline) "No busques tu dignidad en las estrellas, ",
+            (s_underline) "sino en el gobierno de tu pensamiento."
+        ;
+        rtrue;
+    ],
+has   ;
+
+SceneryThing objINSCRIPCION "inscripción" ZOT_S3___MIRADOR
+with
+    name 'INSCRIPCION',
+    description [;
+        print "Se puede leer claramente, ",
+            (s_underline) "A.D."
+        ;
+        rtrue;
+    ],
+has   ;
+
+Thing objLLAVE_DIGITAL_DE_MEMORIA "llave digital de memoria" ZOCA_S4___CAPITANIA
+private
+    nivel 0,
+with
+    probada false,
+    getNivel [;
+        return self.nivel;
+    ],
+    incrementaNivel [;
+        self.nivel++;
+        self.probada = false;
+        rtrue;
+    ],
+    name 'LLAVE' 'digital' 'memoria' 'tarjeta',
+    description "Es una pequeña tarjeta que contiene todos tus datos biométricos, así como puede albergar algunos datos sobre tu misión, y sobre todo permisos de acceso.",
+    before [;
+        Insert, PutOn:
+                if ( self notin player ) {
+                    player.think( "Necesito mi llave de memoria." );
+                    rtrue;
+                }
+
+                if ( second == Nothing ) {
+                    second = location.cerradura;
+                }
+
+                self.probada = true;
+                if ( objLLAVE_DIGITAL_DE_MEMORIA.nivel >= location.nivel ) {
+                    print "Introduces tu llave digital en ", (the) second, ", ",
+                        "con lo que el piloto pasa a verde.^"
+                    ;
+
+                    if ( location.conLlave == location.cerradura ) {
+                        if ( second hasnt open )
+                                give second open;
+                        else    give second ~open;
+                    } else {
+                        print "Te pones en movimiento...^";
+                        playerTo( location.conLlave, 2 );
+                    }
+                    rtrue;
+                } else {
+                    print "Introduces tu llave de memoria en ", (the) second, ".^";
+                    wait();
+                    print "Sin embargo, no sucede nada. El piloto se mantiene en rojo.^^";
+                    wait();
+                    player.think( "¡Qué extraño!... debo ir a mantenimiento a que me arreglen la llave." );
+                    rtrue;
+                }
+        Give:
+            if ( second == pnjROBOTS_DE_MANTENIMIENTO ) {
+                <<tell pnjROBOTS_DE_MANTENIMIENTO self>>;
+            }
+            else player.think( "No, mi llave es personal, privada e intrasferible." );
+        Show:
+            <<give self second>>;
+    ],
+has female;
+
+SceneryThing objMIRADOR "mirador" ZOT_S3___MIRADOR
+with
+    name 'MIRADOR',
+    description "Bajas la cabeza y tienes a tus plantas uno de los más bellos e impresionantes panoramas que contemplarse puedan. La zona por sobre la cual caminas es la parte más externa del anillo dorado. A través del mirador espacial estás contemplando el núcleo de la galaxia, con sus tres soles centrales y las miríadas de planetas que junto a ellos se agrupan."
+has   ;
+
+Thing objMONO_DE_FAENA "mono de faena" ZOED_S4___AULA
+with
+    name 'MONO' 'faena',
+    description "Es un traje completo, muy cómodo para la vida en dependencias espaciales. Su ligereza y capacidad de transpiración hace que se puedan llevar encima durante largos periodos de tiempo sin provocar alergias ni irritaciones de ningún tipo.",
+    before [;
+        Disrobe:
+            if ( objTRAJE_ESPACIAL notin jugador
+              || objTRAJE_ESPACIAL hasnt worn )
+            {
+                player.think( "¿Y que me vean, así desnudo... ¡de eso nada!" );
+                rtrue;
+            }
+    ],
+has  clothing ;
+
+SceneryThing objNICHOS "nichos" ZODO_S1___DOCUMENTACION
+with
+    name 'NICHOS',
+    description "En los nichos ves los especímenes más raros de la confederación galáctica: el saurius pedorrus, el eridianus cianóticus ..."
+has  pluralname ;
+
+class Palanca
+class SceneryThing
+with
+    name 'palanca' 'etiqueta' 'etiquetado',
+    activate [;
+        print "La palanca cede, y se mueve, pero, aparentemente, no sucede nada.^";
+        rtrue;
+    ],
+    before [;
+        push, pull:
+            self.activate();
+            rtrue;
+    ],
+has female;
+
+
+Palanca objPALANCA_AUTOMATICA "palanca automática" ZOMA_S3___CONTROLES
+with
+    name 'automatica',
+    description "Está etiquetada como ~apertura de compuertas exteriores~.",
+has ;
+
+Palanca objPALANCA_MANUAL "palanca manual" ZOMA_S3___CONTROLES
+with
+    name 'manual',
+    description "Está etiquetada como ~apertura de compuertas exteriores~.",
+    activate [;
+        self.Palanca::activate();
+        planificador.ponAdArreglado();
+        wait( "..." );
+
+        planificador.ad_statusOk = true;
+        print "^Sin embargo, algo te hace pensar que está sucediendo";
+        wait( "..." );
+        print "^Al principio, no es nada";
+        wait( "..." );
+        print " Una extraña sensación que se va acrecentando";
+        wait( "..." );
+
+        if ( objARNES.estaAtado() ) {
+            print " Y así, poco a poco, lo notas, tomas conciencia de
+                   una vibración que se transmite por la cuerda.
+                   Algún movimiento de gran envergadura,
+                   se está produciendo en el Anillo. Instintivamente,
+                   giras la cabeza hacia el espacio exterior,
+                   y esbozas una gran sonrisa. "
+            ;
+        } else {
+            print " Y así, poco a poco, lo notas, tomas conciencia de
+                   una vibración que se transmite por tus miembros en contacto con el DAAD.
+                   Algún movimiento de gran envergadura,
+                   se está produciendo en el Anillo. Instintivamente,
+                   giras la cabeza hacia el espacio exterior,
+                   y esbozas una gran sonrisa. "
+            ;
+        }
+        player.think( "Son las compuertas, ¡se están abriendo!" );
+        wait( "..." );
+        print "^Una gran corriente de energía recorre tu interior,
+               pretendiendo colmar cada hueco, cada miembro, cada músculo.^
+               Tu mirada parece querer contar cada una de las estrellas que se
+               aprecian desde el DAAD.^
+               Todo se arreglará ahora, podrás salir del Anillo Dorado,
+               y ejecutar tu misión"
+        ;
+        wait( "." );
+        wait( ".." );
+
+        if ( objARNES.estaAtado() ) {
+            print "^^Repentinamente, sientes una nueva vibración en la cuerda";
+        } else {
+            print "^^Repentinamente, sientes una nueva vibración.
+                   Una gran fuerza te expulsa, abruptamente, del DAAD";
+        }
+
+        wait( "..." );
+        print " Confiado, diriges tu mirada de nuevo a las compuertas exteriores, pero estas
+               ya no se mueven"
+        ;
+        wait( "..." );
+        print "^Frunces el ceño, y toda tu alegría, transformada en un momento en
+               ansiedad, y el más puro miedo, "
+        ;
+
+        if ( objARNES.estaAtado() ) {
+            objARNES.desataArnes();
+            print "se enfoca en la cuerda.^";
+        } else {
+            print "se enfoca en el vacío que te rodea.^";
+        }
+
+        wait( "...^^" );
+        player.think( "No, por favor. Noooooo..." );
+        playSnd1( sndGRITO, 1, SMW_VOLUME_NORMAL );
+        player.say( "AAAAAAGGGHHHHH" );
+
+        if ( objARNES.estaAtado() ) {
+            print "^La cuerda flota libremente por delante de ti, mientras notas,
+                   con un pavor que nunca pensaste que pudieras sentir jamás, que estás
+                   a punto de salir por el compartimento del DAAD.^"
+            ;
+        } else {
+            print "^Tus pies flotan libremente por delante de ti, mientras notas,
+                   con un pavor que pensaste que pudieras sentir jamás, que estás
+                   a punto de salir por el compartimento del DAAD.^"
+            ;
+        }
+        wait();
+        playSnd1( sndBREATHING, 1, SMW_VOLUME_NORMAL );
+        playSnd2( sndHEARTBEAT, 1, SMW_VOLUME_NORMAL );
+        player.say( "Mmmppphh, mmmpph, aggh, ah..." );
+        print "^Tratas de agarrarte al fuselaje del anillo, aunque todo intento parece en vano";
+        wait( "..." );
+        print "^^";
+        player.think( "No puede terminar así... No puede..." );
+        wait( "..." );
+        wait( "..." );
+
+        print "^^";
+        playerTo( EXTERIOR_DEL_ANILLO, 2 );
+        rtrue;
+    ],
+has ;
+
+SceneryThing objPANEL_DE_CONTROLES "panel de controles" ZOIN_S3___INGENIERIA
+with
+    name 'PANEL' 'controles',
+    description "Diferentes botones y palancas, que, por cierto, debieron caer en desuso hace décadas."
+has   ;
+
+SceneryThing objPLACA "placa" ZOT_S2___PERSONAL
+with
+    name 'PLACA',
+    description [;
+        print "Reza: ",
+        (s_underline) "Hemos amado demasiado a las estrellas como para temer a la noche eterna.",
+        "Unas inscripciones de unas siglas (",
+        (s_underline) "A.R.S y J.M.M.",
+        ") parecen firmar la leyenda. Finalmente, indica ",
+        (s_underline) "d.e.p. 3003 d.c.",
+        "Es escalofriante, y un ejemplo de valentía para todos."
+        ;
+        rtrue;
+    ],
+has female  ;
+
+SceneryThing objRANURA "cerradura óptica de la puerta"
+with
+    found_in [;
+        if ( location == ZOT_S2___PERSONAL )
+                rtrue;
+        else    rfalse;
+    ],
+    name 'RANURA' 'cerradura' 'optica',
+    description "Una ranura para llave digital, de manera que sólo aquellas personas autorizadas puedan entrar a las dependencias de personal. Un pequeño piloto de color rojo está encendido.",
+    before [;
+        Receive:
+            if ( noun ~= objLLAVE_DIGITAL_DE_MEMORIA ) {
+                "La ranura no es para eso.";
+            }
+    ],
+    react_before [;
+        Go:
+            if ( noun == in_obj ) {
+                <<insert objLLAVE_DIGITAL_DE_MEMORIA>>;
+            }
+    ],
+has female  ;
+
+SceneryThing objTAQUILLA "taquilla" ZOAV_S2___TAQUILLAS
+with
+    name 'TAQUILLA' 'RANURA' 'CERRADURA' 'OPTICA',
+    article 'tu',
+    description [;
+        print "Tu taquilla tiene tu nombre escrito en una pequeña etiqueta",
+              " en su frontal. Tiene una cerradura óptica para tu llave magnética.^"
+        ;
+        if ( self has open ) {
+                print "Está abierta.^";
+                <<Search self>>;
+        }
+        else    "Está cerrada.";
+    ],
+    before [;
+        receive:
+            if ( noun ~= objLLAVE_DIGITAL_DE_MEMORIA ) {
+                "Eso no serviría de nada.";
+            }
+        close:
+            if ( self hasnt open ) {
+                player.think( "¡Que despistado soy!... ya está cerrada." );
+                rtrue;
+            }
+
+            if ( objLLAVE_DIGITAL_DE_MEMORIA in jugador ) {
+                <<insert objLLAVE_DIGITAL_DE_MEMORIA self>>;
+            } else "La llave digital de memoria es imprescindible para cerrar la taquilla.";
+        open:
+            if ( self has open ) {
+                player.think( "¡Que despistado soy!... ya está abierta." );
+                rtrue;
+            }
+
+            if ( objLLAVE_DIGITAL_DE_MEMORIA in jugador ) {
+                <<insert objLLAVE_DIGITAL_DE_MEMORIA self>>;
+            } else "La llave digital de memoria es imprescindible para abrir la taquilla.";
+    ],
+has female container openable;
+
+SceneryThing objTAQUILLAS "taquillas" ZOAV_S2___TAQUILLAS
+with
+    name 'TAQUILLAS',
+    description "Son todas iguales, cada una se abre con la llave digital de cada uno. Reconoces la tuya al instante.",
+    before [;
+        receive:
+            if ( second == objLLAVE_DIGITAL_DE_MEMORIA ) {
+                player.think( "Mi llave sólo funcionará con mi propia taquilla." );
+            }
+            else "No puedes meter nada en las taquillas de otros.";
+    ],
+has female pluralname ;
+
+SceneryThing objVAINA "vaina" ZODE_S1___DESCOMPRESION
+with
+    name 'VAINA',
+    description "En la vaina puedes ver un traje espacial de combate. Una ranura permite abrir la cámara mediante la llave digital de memoria.",
+    before [;
+        open:
+            <<insert objLLAVE_DIGITAL_DE_MEMORIA self>>;
+    ],
+has female container transparent openable;
+
+SceneryThing objTransmisor "transmisor" ZODE_S1___DESCOMPRESION
+with
+    name_m 'transmisor' 'comunicador' 'transceptor',
+    name_f 'radio',
+    genero G_MASCULINO,
+    description "Permite la comunicación entre los hangares y la zona de
+                 descompresión. En especial, permite hablar con el supervisor de
+                 embarque. Tiene una cámara incorporada.",
+    before [;
+        Tell: <<Tell pnjSUPERVISOR>>;
+    ],
+has container transparent;
+
+Thing objTRAJE_ESPACIAL "traje espacial" objVAINA
+with
+    name 'TRAJE' 'espacial',
+    description "Es un traje mezcla hecho de una combinación de admantio, fieltro, titanio y kevlar preparado para misiones en el espacio. Cuenta con una unidad de oxígeno. A pesar de todo, incluyendo el peso algo mayor, es sólo un poco más incómodo que el traje de faena.",
+    before [;
+        Disrobe:
+            if ( objMONO_DE_FAENA notin jugador
+              || objMONO_DE_FAENA hasnt worn )
+            {
+                player.think( "No... ¡De eso nada!" );
+                rtrue;
+            }
+
+        Wear:
+            if ( objMONO_DE_FAENA in player
+              && objMONO_DE_FAENA has worn )
+            {
+                give objMONO_DE_FAENA ~worn;
+                print "(primero te quitas el mono de faena)^";
+            }
+            rfalse;
+    ],
+has  clothing ;
+
+SceneryThing objVESPA "vespa" ZOHA_S1__HANGAR
+with
+    name 'VESPA' 'escalerilla' 'escalera' 'ranura',
+    description [;
+        ViewImageCenter( grfVESPA );
+        print "La vespa de la escalerilla tiene una ranura para llave magnética.^";
+        wait();
+        <<look>>;
+    ],
+    before [;
+        Enter: <<insert objLLAVE_DIGITAL_DE_MEMORIA self>>;
+    ],
+has female  ;
+
+SceneryThing objVESPAS "vespas" ZOHA_S1__HANGAR
+with
+    name_fp 'VESPAS',
+    name_mp 'vehiculos' 'espaciales',
+    description [;
+        ViewImageCenter( grfVESPAS );
+        print "Todos suelen llamar a estas naves VESPAs, por un juego de palabras proviniente de su nombte Vehículos ESPAciales. Nadie sabe lo que significa ~vespa~, pero es gracioso. Los capitanes galácticos prefieren llamarlas AVISPAS, como dándoles más valor a sus posibilidades de ataque. Todas ellas están en periodo de mantenimiento, menos una con su escalera ya colocada.^";
+        wait();
+        <<look>>;
+    ],
+has female pluralname ;
+
+SceneryThing objSOPORTE_PARA_PDA "soporte para PDA" ZODE_S1___DESCOMPRESION
+with
+    found_in [;
+        if ( location == ZODE_S1___DESCOMPRESION or vespa___navegacion ) {
+            rtrue;
+        }
+
+        rfalse;
+    ],
+	name 'SOPORTE' 'base',
+	description "Es una base con las conexiones para tu PDA."
+has open transparent container;
+
+object Planificador
+with
+    ad_statusOk true,    ! true = todo funciona, false = avería
+    ad_arreglado false,  ! false = no ha pasado nada, true = arreglado.
+    ponAdArreglado [;
+        self.ad_arreglado = true;
+        self.ad_statusOk = true;
+    ],
+    inicio [;
+        ! Trigger the adventure
+        print "^";
+        wait();
+        print "Un robot de mantenimiento se presenta.^";
+        wait();
+        pnjROBOT_DE_MANTENIMIENTO.say( "Acompáñeme. El capitán requiere su presencia." );
+        player.think( "¿El capitán galáctico? ¡Es increíble!" );
+        print "Tu excitación aumenta por momentos. Jamás hubieras pensado en algo así, tan pronto. Apenas eres consciente de por dónde vas, te sientes como flotando...^";
+        wait();
+        playerTo( ZOT_S4___CAPITANIA, 2 );
+        print "^Sigues al robot...^";
+        wait();
+        playerTo( ZOCA_S4___CAPITANIA, 2 );
+        print "^El robot no entra, sólo se asegura de que tú te estés frente al capitán...^";
+        wait();
+    ],
+    hazInventarioLateral [ x;
+        #Ifdef TARGET_GLULX;
+                SMW.setCurrentSubWindow( 1 );
+                SMW.cleanSubWindow( 1 );
+
+                print (s_emph) "Llevas encima:", "^^";
+                objectloop ( x in player ) {
+                    print " - ";
+                    s_fixed();
+                    ! setBeginHyperLink( HL_OBJ_BASE + x );
+                    print (name) x;
+                    ! setEndHyperlink();
+                    s_normal();
+                    print "^";
+                }
+                s_normal();
+
+                SMW.setMainWindowAsCurrent();
+        #Ifnot;
+            x = 0;
+        #Endif;
+    ],
+    hazMapaLateral [ grfAux;
+        #Ifdef TARGET_GLULX;
+                grfAux = location.auxGrf;
+
+                if ( grfAux ~= Nothing ) {
+                    drawImageInSubWindow( 0, grfAux );
+                }
+        #Ifnot;
+            grfAux = 0;
+        #Endif;
+    ],
+    hazSalidasLateral [;
+        #Ifdef TARGET_GLULX;
+                SMW.setCurrentSubWindow( 2 );
+                SMW.cleanSubWindow( 2 );
+
+                print (s_emph) "Salidas:", "^^";
+                <salidas>;
+
+                SMW.setMainWindowAsCurrent();
+        #Endif;
+    ],
+    actualizarInventario [;
+        self.hazInventarioLateral();
+    ],
+    actualizarMapa [;
+        self.hazMapaLateral();
+        self.actualizaSalidas();
+    ],
+    actualizaSalidas [;
+        self.hazSalidasLateral();
+    ],
+    actualizarVentanas [;
+        self.actualizarInventario();
+        self.actualizarMapa();
+        self.actualizaSalidas();
+    ],
+    daemon [;
+        if ( turns == 1 ) {
+            self.inicio();
+            rtrue;
+        }
+    ],
+;
+
+! =============================== Gramática ==============================================
+
+[ salidasSub;
+    if ( location ofclass ZOT ) {
+        print "Los brazos del anillo siguen el sentido del ";
+        setBeginHyperlink( HL_GIRO );
+        print (s_fixed) "giro";
+        setEndHyperLink();
+        print " y del ";
+        setBeginHyperlink( HL_AGIRO );
+        print (s_fixed) "antigiro";
+        setEndHyperlink();
+        print ". También puedes ";
+        setBeginHyperlink( HL_ENTRAR );
+        print (s_fixed) "entrar";
+        setEndHyperlink();
+        print " en la cabina.^";
+    } else {
+        if ( location ofclass CAB ) {
+            print "Puedes ";
+            setBeginHyperlink( HL_SALIR );
+            print (s_fixed) "salir";
+            setEndHyperlink();
+            print " al pasillo del anillo.^";
+        }
+        else location.salidas();
+    }
+
+    rtrue;
+];
+
+[ desatarSub;
+    print "No tiene sentido desatar ", (un) noun;
+
+    if ( second ~= Nothing ) {
+        print " ", (del) second;
+    }
+
+    ".^";
+];
+
+[ gritarSub;
+    print "Estás deseando gritar, pero, lo piensas mejor.^";
+    player.think( "Debo tranquilizarme." );
+    rtrue;
+];
+
+[ayudaSub;
+    print "^Las órdenes siguientes son básicas y pueden encontrarse
+      en casi cualquier aventura conversacional. El jugador
+      puede tratar siempre de hacer otras acciones.^^"
+    ;
+    s_fixed();
+    print "^
+     ayuda                 -   Esta ayuda.^
+     proa, popa, estribor (e), babor (b)
+                           -   Moverse en naves según puntos náuticos.^
+     giro (g), antigiro (a)
+                           -   Moverse en naves con forma de anillo que rotan.^
+     ex, examinar x        -   Da una descripción de x.^
+     examinarme, xme       -   Información sobre ti y sobre tu misión.^
+     hablar con y          -   Permite comunicarse con y, si está presente.^
+     coge x, deja x        -   x pasa a ser o deja de ser llevado.^
+     i, inventario         -   Da una lista de los objetos llevados.^
+     Dar x a y             -   Ofrece el objeto x al personaje y.^
+     ^^"
+    ;
+    s_normal();
+    print (s_underline) "Por Baltasar, el Arquero.", (s_normal)
+    "^^
+      Mándame tus comentarios a: baltasarq@@64yahoo.es
+      ^^
+      Tú eres ", (s_underline) player.short_name,
+      ", un Comando Espacial de la Confederación Galáctica...
+     ^";
+    <<Examine player>>;
+];
+
+[ restartSub;
+    L__M( ##Restart,1 );
+    if ( YesOrNo() ) {
+        closeAllWindows();
+        @restart;
+        L__M( ##Restart, 2 );
+    }
+];
+
+[contarSub;
+    if ( noun has pluralname ) {
+        if ( noun has female )
+                "Más de una, seguro ...";
+        else    "Más de uno, seguro ...";
+    }
+    else {
+        if ( noun has female )
+                "Una.";
+        else    "Uno.";
+    }
+];
+
+Extend 'cuenta' first
+    * noun -> contar
+;
+
+Verb 'salidas'
+    * -> salidas
+;
+
+Verb 'desata'
+    * noun -> desatar
+    * noun noun -> desatar
+    * noun 'de'/'del' noun -> desatar
+;
+
+Verb meta 'ayuda' 'pistas'
+    * -> ayuda
+;
+Extend 'grita' first
+    * -> gritar
+;
+
+Extend 'cuenta' first
+    * noun -> contar
+    * 'a//'/'al' noun -> contar
+;
+VerboIrregular "cuenta" with infinitivo "contar";
+
+Extend 'habla' first
+    * 'por' noun -> Tell
+;
+
