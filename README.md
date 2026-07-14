@@ -6,6 +6,8 @@ _La Aventura Espacial es un relato interactivo escrito en Inform 6._
 
 _La Aventura Espacial_ es un relato interactivo basado en una aventura conversacional, manejada por menús, de los años 80. La empresa que la creó fue **Aventuras AD**, dirigida por el icónico Andrés Samudio.
 
+![Aventura Espacial I](res/aventuraEspacial_caratula.jpg).
+
 En esta primera parte, disponible en origen únicamente para PC, Atari y Amiga, acabas de terminar tu período de aprendizaje en el Anillo Dorado y eres ya todo un Cosme. Debes prepararte para la peligrosa misión que te encomendarán.
 
 Localizaciones del Anillo Dorado:
